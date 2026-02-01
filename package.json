@@ -1,0 +1,14 @@
+{
+  "name": "pk-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --recursive --parallel dev",
+    "build": "pnpm --recursive build",
+    "studio": "pnpm --filter studio dev",
+    "web": "pnpm --filter web dev",
+    "typegen": "pnpm --filter studio typegen",
+    "lint": "pnpm --recursive lint"
+  },
+  "devDependencies": {
+  }
+}
