@@ -47,3 +47,38 @@ Multilingual (Ukrainian/Russian) content site with a Sanity Studio backend and a
    (watches `apps/studio/schemaTypes/**/*.ts` and `apps/web/src/queries.ts`, then runs studio extract + typegen.)
 
 Optional: if you use Sanity preview or a read token, set the needed env vars (e.g. in `apps/web` or root) as per your setup.
+
+## Deploy on Vercel (website + studio)
+
+Use **one repo, two Vercel projects**. Connect the same GitHub repo to both projects and set a different **Root Directory** for each.
+
+### 1. Connect the repo (for both projects)
+
+- In Vercel: **Add New Project** → **Import** your Git repository (e.g. `timidri/pershyykrok`).
+- Do this **twice** so you have two projects (e.g. `pershyykrok-web` and `pershyykrok-studio`).
+- For each project, after import, go to **Settings → General** and set **Root Directory** as below. Leave it empty for none; use **Edit** and enter the path.
+
+### 2. Project 1 — Website (Astro)
+
+- **Root Directory**: `apps/web`
+- **Framework Preset**: Astro (optional; Vercel usually detects it)
+- **Build Command**: `pnpm run build` (default)
+- **Output Directory**: `dist` (default for Astro)
+- **Install Command**: `pnpm install` (default; pnpm will use the repo root workspace from `apps/web`)
+
+No env vars required if Sanity `projectId`/`dataset` stay in code. For overrides, add `PUBLIC_SANITY_PROJECT_ID` and `PUBLIC_SANITY_DATASET` and read them in `apps/web/src/lib/sanity.ts`.
+
+### 3. Project 2 — Studio (Sanity)
+
+- **Root Directory**: `apps/studio`
+- **Framework Preset**: Other (or leave default)
+- **Build Command**: `pnpm run build` (runs `sanity build`)
+- **Output Directory**: `dist`
+- **Install Command**: `pnpm install`
+
+Optional: if your Sanity project needs env vars (e.g. for CORS or a plugin), add them in the Studio project’s **Settings → Environment Variables**.
+
+### 4. After deploy
+
+- **Website**: Use the Vercel URL (e.g. `pershyykrok-web.vercel.app`).
+- **Studio**: Use the Studio project URL (e.g. `pershyykrok-studio.vercel.app`). In [sanity.io/manage](https://sanity.io/manage), add this URL to your project’s **API → CORS origins** (and **Hosts** if you use it) so the Studio can talk to Sanity.
