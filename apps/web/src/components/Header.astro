@@ -22,32 +22,32 @@ function hrefForLink(link: { _type: string; slug: string | null } | null, locale
 }
 ---
 
-<header className="border-b border-gray-200">
-  <div className="max-w-5xl mx-auto px-8 py-4 flex items-center justify-between gap-6">
-    <a href={`/${locale}/`} className="shrink-0 block [contain:layout_paint]" aria-label="Home">
+<header class="border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-8 py-4 flex items-center justify-between gap-6">
+    <a href={`/${locale}/`} class="shrink-0 block [contain:layout_paint]" aria-label="Home">
       {siteSettings?.logo ? (
         <img
           src={urlForImage(siteSettings.logo).width(140).height(140).url()}
-          srcSet={`${urlForImage(siteSettings.logo).width(80).height(80).url()} 80w, ${urlForImage(siteSettings.logo).width(140).height(140).url()} 140w, ${urlForImage(siteSettings.logo).width(280).height(280).url()} 280w`}
+          srcset={`${urlForImage(siteSettings.logo).width(80).height(80).url()} 80w, ${urlForImage(siteSettings.logo).width(140).height(140).url()} 140w, ${urlForImage(siteSettings.logo).width(280).height(280).url()} 280w`}
           sizes="80px (max-width: 767px), 140px"
           alt=""
           width="140"
           height="140"
-          className="logo-img h-[80px] w-[80px] md:h-[140px] md:w-[140px] object-contain"
+          class="logo-img h-[80px] w-[80px] md:h-[140px] md:w-[140px] object-contain"
           loading="eager"
           decoding="async"
         />
       ) : (
-        <span className="font-heading text-h3">Logo</span>
+        <span class="font-heading text-h3">Logo</span>
       )}
     </a>
 
     {menu && menu.length > 0 && (
-      <nav className="flex items-center gap-6" aria-label="Main">
+      <nav class="flex items-center gap-6" aria-label="Main">
         {menu.map((item) => (
           <a
             href={hrefForLink(item.link, locale)}
-            className="text-body text-gray-700 hover:text-gray-900 underline-offset-2 hover:underline"
+            class="text-body text-gray-700 hover:text-gray-900 underline-offset-2 hover:underline"
           >
             {item.label ?? ''}
           </a>
@@ -55,18 +55,18 @@ function hrefForLink(link: { _type: string; slug: string | null } | null, locale
       </nav>
     )}
 
-    <div className="flex items-center gap-4 shrink-0">
+    <div class="flex items-center gap-4 shrink-0">
       <a
         href={locale === 'ua' ? currentPath : otherPath}
-        className={`text-body ${locale === 'ua' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
-        hrefLang="uk"
+        class={`text-body ${locale === 'ua' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
+        hreflang="uk"
       >
         Українська
       </a>
       <a
         href={locale === 'ru' ? currentPath : otherPath}
-        className={`text-body ${locale === 'ru' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
-        hrefLang="ru"
+        class={`text-body ${locale === 'ru' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
+        hreflang="ru"
       >
         Русский
       </a>
