@@ -9,6 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "@astrojs/react": "^4.4.2",
+    "@portabletext/react": "^6.0.2",
+    "@sanity/client": "^7.14.1",
+    "astro": "^5.17.1",
+    "groq": "^5.7.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sanity": "^5.7.0"
   }
 }

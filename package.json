@@ -7,8 +7,10 @@
     "studio": "pnpm --filter studio dev",
     "web": "pnpm --filter web dev",
     "typegen": "pnpm --filter studio typegen",
-    "lint": "pnpm --recursive lint"
+    "lint": "pnpm --recursive lint",
+    "watch:types": "onchange 'apps/studio/schemaTypes/**/*.ts' 'apps/web/src/queries.ts' -- pnpm --filter studio codemod"
   },
   "devDependencies": {
+    "onchange": "^7.1.0"
   }
 }
