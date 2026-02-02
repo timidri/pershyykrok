@@ -47,10 +47,6 @@ export type SiteSettings = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  headerSlogan?: {
-    ru?: string;
-    ua?: string;
-  };
   mainMenuRu?: Array<{
     label?: string;
     link?: PageReference | HomePageReference;
@@ -64,6 +60,11 @@ export type SiteSettings = {
   footerText?: {
     ru?: string;
     ua?: string;
+  };
+  contact?: {
+    address?: string;
+    phone?: string;
+    website?: string;
   };
 };
 
@@ -142,24 +143,7 @@ export type Page = {
   language?: string;
   title?: string;
   slug: Slug;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
+  body?: BlockContent;
 };
 
 export type Slug = {
@@ -176,30 +160,11 @@ export type HomePage = {
   _rev: string;
   language?: string;
   title?: string;
-  introText?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
+  introText?: BlockContent;
   meetingSection?: {
     sectionTitle?: string;
     time?: string;
-    address?: string;
     languages?: string;
-    phone?: string;
     mapLocation?: Geopoint;
   };
 };
@@ -333,43 +298,101 @@ type ArrayOf<T> = Array<
 >;
 
 // Source: ../web/src/queries.ts
+// Variable: siteSettingsQuery
+// Query: *[_id == "siteSettings"][0]{  logo,  mainMenuRu[]{    label,    "link": link->{ _type, "slug": slug.current }  },  mainMenuUa[]{    label,    "link": link->{ _type, "slug": slug.current }  },  footerText,  "contact": coalesce(contact, footerContact)}
+export type SiteSettingsQueryResult =
+  | {
+      logo: null;
+      mainMenuRu: null;
+      mainMenuUa: null;
+      footerText: null;
+      contact: null;
+    }
+  | {
+      logo: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      mainMenuRu: Array<{
+        label: string | null;
+        link:
+          | {
+              _type: "homePage";
+              slug: null;
+            }
+          | {
+              _type: "page";
+              slug: string;
+            }
+          | null;
+      }> | null;
+      mainMenuUa: Array<{
+        label: string | null;
+        link:
+          | {
+              _type: "homePage";
+              slug: null;
+            }
+          | {
+              _type: "page";
+              slug: string;
+            }
+          | null;
+      }> | null;
+      footerText: {
+        ru?: string;
+        ua?: string;
+      } | null;
+      contact: {
+        address?: string;
+        phone?: string;
+        website?: string;
+      } | null;
+    }
+  | null;
+
+// Source: ../web/src/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && language == "ru"][0]{  title,  introText,  language,  meetingSection}
+// Query: *[_type == "homePage" && language == $locale][0]{  title,  introText,  language,  meetingSection}
 export type HomePageQueryResult = {
   title: string | null;
-  introText: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
-  language: "ru";
+  introText: BlockContent | null;
+  language: string | null;
   meetingSection: {
     sectionTitle?: string;
     time?: string;
-    address?: string;
     languages?: string;
-    phone?: string;
     mapLocation?: Geopoint;
   } | null;
 } | null;
+
+// Source: ../web/src/queries.ts
+// Variable: pageBySlugQuery
+// Query: *[_type == "page" && language == $locale && slug.current == $slug][0]{  title,  body,  slug}
+export type PageBySlugQueryResult = {
+  title: string | null;
+  body: BlockContent | null;
+  slug: Slug;
+} | null;
+
+// Source: ../web/src/queries.ts
+// Variable: allPageSlugsQuery
+// Query: *[_type == "page" && defined(slug.current)]{  "locale": language,  "slug": slug.current}
+export type AllPageSlugsQueryResult = Array<{
+  locale: string | null;
+  slug: string;
+}>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "homePage" && language == "ru"][0]{\n  title,\n  introText,\n  language,\n  meetingSection\n}': HomePageQueryResult;
+    '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact)\n}': SiteSettingsQueryResult;
+    '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection\n}': HomePageQueryResult;
+    '*[_type == "page" && language == $locale && slug.current == $slug][0]{\n  title,\n  body,\n  slug\n}': PageBySlugQueryResult;
+    '*[_type == "page" && defined(slug.current)]{\n  "locale": language,\n  "slug": slug.current\n}': AllPageSlugsQueryResult;
   }
 }

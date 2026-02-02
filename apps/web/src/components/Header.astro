@@ -1,0 +1,75 @@
+---
+import { urlForImage } from '../lib/sanity';
+import type { SiteSettingsQueryResult } from '../sanity-types';
+
+interface Props {
+  siteSettings: SiteSettingsQueryResult;
+  locale: 'ru' | 'ua';
+  currentPath: string;
+}
+
+const { siteSettings, locale, currentPath } = Astro.props;
+
+const menu = locale === 'ua' ? siteSettings?.mainMenuUa : siteSettings?.mainMenuRu;
+const otherLocale: 'ru' | 'ua' = locale === 'ua' ? 'ru' : 'ua';
+const otherPath = currentPath.replace(`/${locale}`, `/${otherLocale}`) || `/${otherLocale}`;
+
+function hrefForLink(link: { _type: string; slug: string | null } | null, locale: string): string {
+  if (!link) return '#';
+  if (link._type === 'homePage') return `/${locale}/`;
+  if (link._type === 'page' && link.slug) return `/${locale}/${link.slug}`;
+  return '#';
+}
+---
+
+<header class="border-b border-gray-200">
+  <div class="max-w-5xl mx-auto px-8 py-4 flex items-center justify-between gap-6">
+    <a href={`/${locale}/`} class="shrink-0 block [contain:layout_paint]" aria-label="Home">
+      {siteSettings?.logo ? (
+        <img
+          src={urlForImage(siteSettings.logo).width(140).height(140).url()}
+          srcset={`${urlForImage(siteSettings.logo).width(80).height(80).url()} 80w, ${urlForImage(siteSettings.logo).width(140).height(140).url()} 140w, ${urlForImage(siteSettings.logo).width(280).height(280).url()} 280w`}
+          sizes="80px (max-width: 767px), 140px"
+          alt=""
+          width="140"
+          height="140"
+          class="logo-img h-[80px] w-[80px] md:h-[140px] md:w-[140px] object-contain"
+          loading="eager"
+          decoding="async"
+        />
+      ) : (
+        <span class="font-heading text-h3">Logo</span>
+      )}
+    </a>
+
+    {menu && menu.length > 0 && (
+      <nav class="flex items-center gap-6" aria-label="Main">
+        {menu.map((item) => (
+          <a
+            href={hrefForLink(item.link, locale)}
+            class="text-body text-gray-700 hover:text-gray-900 underline-offset-2 hover:underline"
+          >
+            {item.label ?? ''}
+          </a>
+        ))}
+      </nav>
+    )}
+
+    <div class="flex items-center gap-4 shrink-0">
+      <a
+        href={locale === 'ua' ? currentPath : otherPath}
+        class={`text-body ${locale === 'ua' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
+        hreflang="uk"
+      >
+        Українська
+      </a>
+      <a
+        href={locale === 'ru' ? currentPath : otherPath}
+        class={`text-body ${locale === 'ru' ? 'font-semibold underline' : 'text-gray-600 hover:text-gray-900'}`}
+        hreflang="ru"
+      >
+        Русский
+      </a>
+    </div>
+  </div>
+</header>

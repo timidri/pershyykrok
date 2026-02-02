@@ -22,8 +22,7 @@ export default defineType({
       name: 'introText',
       title: 'Introduction Text',
       description: 'The main text above the map section',
-      type: 'array', 
-      of: [{type: 'block'}]
+      type: 'blockContent',
     },
     
     // --- Meeting Details (Fixed Layout) ---
@@ -33,11 +32,9 @@ export default defineType({
       type: 'object',
       options: { collapsible: true, collapsed: false },
       fields: [
-        { name: 'sectionTitle', type: 'string', title: 'Section Title' }, // "Детали группы"
+        { name: 'sectionTitle', type: 'string', title: 'Section Title' },
         { name: 'time', type: 'string', title: 'Time' },
-        { name: 'address', type: 'string', title: 'Address' },
         { name: 'languages', type: 'string', title: 'Languages' },
-        { name: 'phone', type: 'string', title: 'Phone Number' },
         { name: 'mapLocation', type: 'geopoint', title: 'Map Coordinates' }
       ]
     }

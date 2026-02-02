@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { client } from '../../lib/sanity';
+import { PortableText } from '@portabletext/react';
+import { portableTextBlockComponents } from '../../components/PortableTextComponents';
+import type { PageBySlugQueryResult } from '../../sanity-types';
+import { pageBySlugQuery, allPageSlugsQuery } from '../../queries';
+
+const LOCALES = ['ua', 'ru'] as const;
+type Locale = (typeof LOCALES)[number];
+
+type SlugDoc = { locale: string; slug: string };
+
+export async function getStaticPaths() {
+  const docs = await client.fetch<SlugDoc[]>(allPageSlugsQuery);
+  if (!docs || docs.length === 0) return [];
+  return docs
+    .filter((d) => d.locale && d.slug && LOCALES.includes(d.locale as Locale))
+    .map((d) => ({
+      params: { locale: d.locale, slug: d.slug },
+    }));
+}
+
+const { locale, slug } = Astro.params as { locale: string; slug: string | undefined };
+
+if (!locale || !LOCALES.includes(locale as Locale)) {
+  return Astro.redirect('/404');
+}
+
+const slugStr = slug ?? '';
+if (!slugStr) return Astro.redirect(`/${locale}`);
+
+const data = await client.fetch<PageBySlugQueryResult>(pageBySlugQuery, { locale, slug: slugStr });
+
+if (!data) return Astro.redirect('/404');
+---
+
+<BaseLayout title={data.title ?? 'Page'} locale={locale as Locale} currentPath={`/${locale}/${slugStr}`}>
+  <div class="max-w-3xl mx-auto px-8 py-16">
+    {data.body && <PortableText value={data.body} components={portableTextBlockComponents} />}
+  </div>
+</BaseLayout>

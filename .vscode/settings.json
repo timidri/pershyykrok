@@ -1,0 +1,8 @@
+{
+  "tailwindCSS.configFile": "apps/web/tailwind.config.mjs",
+  "tailwindCSS.includeLanguages": {
+    "astro": "html",
+    "css": "css"
+  },
+  "css.lint.unknownAtRules": "ignore"
+}

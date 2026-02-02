@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-light;
+  }
+  h1 {
+    @apply text-h1;
+  }
+  h2 {
+    @apply text-h2;
+  }
+  h3 {
+    @apply text-h3;
+  }
+  h4 {
+    @apply text-h4;
+  }
+  h5 {
+    @apply text-h5;
+  }
+  h6 {
+    @apply text-h6;
+  }
+}
+
+/* Hero/intro: subheading centered, body justified, spacing from layout */
+.intro h3 {
+  @apply text-center;
+}
+.intro p {
+  @apply text-justify;
+}
+
+/* Logo: promote to own layer to avoid subpixel blur; align to pixel grid */
+.logo-img {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

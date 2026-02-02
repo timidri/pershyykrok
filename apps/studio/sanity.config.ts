@@ -16,12 +16,28 @@ export default defineConfig({
     types: schemaTypes,
   },
   plugins: [
-    structureTool(),
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Content')
+          .items([
+            S.listItem()
+              .title('Site Settings')
+              .id('siteSettings')
+              .child(
+                S.document()
+                  .schemaType('siteSettings')
+                  .documentId('siteSettings')
+              ),
+            S.documentTypeListItem('homePage').title('Home Page'),
+            S.documentTypeListItem('page').title('Pages'),
+          ]),
+    }),
     visionTool(),
     documentInternationalization({
       supportedLanguages: [
-        { id: 'ru', title: 'Russian' },
-        { id: 'ua', title: 'Ukrainian' }
+        { id: 'ua', title: 'Ukrainian' },
+        { id: 'ru', title: 'Russian' }
       ],
       schemaTypes: ['homePage', 'page'], 
       languageField: 'language'

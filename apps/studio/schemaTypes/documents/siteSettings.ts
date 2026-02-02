@@ -4,6 +4,9 @@ export default defineType({
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
+  preview: {
+    prepare: () => ({ title: 'Site Settings' }),
+  },
   fields: [
     // --- Header ---
     {
@@ -11,19 +14,8 @@ export default defineType({
       type: 'image',
       title: 'Site Logo'
     },
-    {
-      name: 'headerSlogan',
-      title: 'Header Slogan', 
-      description: 'Text like "You are not alone..."',
-      type: 'object',
-      // Field-level translation since this object is shared globally
-      fields: [
-        { name: 'ru', type: 'string', title: 'Russian' },
-        { name: 'ua', type: 'string', title: 'Ukrainian' }
-      ]
-    },
-    
-    // --- Navigation (Manual Control) ---
+
+    // --- Navigation ---
     {
       name: 'mainMenuRu',
       title: 'Main Menu (Russian)',
@@ -58,11 +50,23 @@ export default defineType({
     // --- Footer ---
     {
       name: 'footerText',
-      title: 'Footer Copyright',
+      title: 'Footer Text (copyright and org info)',
+      description: 'Use newlines for multiple lines. Shown in footer left block.',
       type: 'object',
       fields: [
-        { name: 'ru', type: 'string', title: 'Russian' },
-        { name: 'ua', type: 'string', title: 'Ukrainian' }
+        { name: 'ru', type: 'text', title: 'Russian', rows: 4 },
+        { name: 'ua', type: 'text', title: 'Ukrainian', rows: 4 }
+      ]
+    },
+    {
+      name: 'contact',
+      title: 'Contact (used in meeting block, button, and footer)',
+      type: 'object',
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        { name: 'address', type: 'string', title: 'Address' },
+        { name: 'phone', type: 'string', title: 'Phone Number' },
+        { name: 'website', type: 'url', title: 'Website URL' }
       ]
     }
   ]

@@ -18,11 +18,10 @@ export default defineType({
       options: { source: 'title' },
       validation: Rule => Rule.required()
     },
-    { 
-      name: 'body', 
-      title: 'Content', 
-      type: 'array', 
-      of: [{type: 'block'}] // Standard text editor
+    {
+      name: 'body',
+      title: 'Content',
+      type: 'blockContent',
     }
   ]
 })
