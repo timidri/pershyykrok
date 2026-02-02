@@ -20,7 +20,11 @@ export const homePageQuery = groq`*[_type == "homePage" && language == $locale][
   title,
   introText,
   language,
-  meetingSection
+  meetingSection{
+    sectionTitle,
+    time,
+    languages
+  }
 }`;
 
 /** Generic page by locale and slug. Pass $locale and $slug when fetching. */

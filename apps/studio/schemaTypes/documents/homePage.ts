@@ -34,8 +34,7 @@ export default defineType({
       fields: [
         { name: 'sectionTitle', type: 'string', title: 'Section Title' },
         { name: 'time', type: 'string', title: 'Time' },
-        { name: 'languages', type: 'string', title: 'Languages' },
-        { name: 'mapLocation', type: 'geopoint', title: 'Map Coordinates' }
+        { name: 'languages', type: 'string', title: 'Languages' }
       ]
     }
   ]

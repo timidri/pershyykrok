@@ -30,7 +30,7 @@ const t = {
   ru: { when: 'Когда', where: 'Где', languages: 'Языки', phone: 'Телефон', callUs: 'Позвоните нам' },
 }[locale as Locale];
 
-const mapLocation = data.meetingSection?.mapLocation;
+const mapLocation = siteSettings?.contact?.mapLocation;
 const hasMap = mapLocation && mapLocation.lat != null && mapLocation.lng != null;
 const mapBbox = hasMap
   ? [

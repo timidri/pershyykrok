@@ -65,7 +65,15 @@ export type SiteSettings = {
     address?: string;
     phone?: string;
     website?: string;
+    mapLocation?: Geopoint;
   };
+};
+
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
 };
 
 export type SanityImageCrop = {
@@ -165,15 +173,7 @@ export type HomePage = {
     sectionTitle?: string;
     time?: string;
     languages?: string;
-    mapLocation?: Geopoint;
   };
-};
-
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -271,6 +271,7 @@ export type AllSanitySchemaTypes =
   | PageReference
   | HomePageReference
   | SiteSettings
+  | Geopoint
   | SanityImageCrop
   | SanityImageHotspot
   | BlockContent
@@ -280,7 +281,6 @@ export type AllSanitySchemaTypes =
   | Page
   | Slug
   | HomePage
-  | Geopoint
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -350,22 +350,22 @@ export type SiteSettingsQueryResult =
         address?: string;
         phone?: string;
         website?: string;
+        mapLocation?: Geopoint;
       } | null;
     }
   | null;
 
 // Source: ../web/src/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && language == $locale][0]{  title,  introText,  language,  meetingSection}
+// Query: *[_type == "homePage" && language == $locale][0]{  title,  introText,  language,  meetingSection{    sectionTitle,    time,    languages  }}
 export type HomePageQueryResult = {
   title: string | null;
   introText: BlockContent | null;
   language: string | null;
   meetingSection: {
-    sectionTitle?: string;
-    time?: string;
-    languages?: string;
-    mapLocation?: Geopoint;
+    sectionTitle: string | null;
+    time: string | null;
+    languages: string | null;
   } | null;
 } | null;
 
@@ -391,7 +391,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact)\n}': SiteSettingsQueryResult;
-    '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection\n}': HomePageQueryResult;
+    '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection{\n    sectionTitle,\n    time,\n    languages\n  }\n}': HomePageQueryResult;
     '*[_type == "page" && language == $locale && slug.current == $slug][0]{\n  title,\n  body,\n  slug\n}': PageBySlugQueryResult;
     '*[_type == "page" && defined(slug.current)]{\n  "locale": language,\n  "slug": slug.current\n}': AllPageSlugsQueryResult;
   }

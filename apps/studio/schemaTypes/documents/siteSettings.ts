@@ -66,7 +66,13 @@ export default defineType({
       fields: [
         { name: 'address', type: 'string', title: 'Address' },
         { name: 'phone', type: 'string', title: 'Phone Number' },
-        { name: 'website', type: 'url', title: 'Website URL' }
+        { name: 'website', type: 'url', title: 'Website URL' },
+        {
+          name: 'mapLocation',
+          type: 'geopoint',
+          title: 'Map coordinates',
+          description: 'Location for the map on the homepage (lat/lng). Altitude is optional.'
+        }
       ]
     }
   ]

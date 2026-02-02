@@ -313,10 +313,55 @@
                 "type": "string"
               },
               "optional": true
+            },
+            "mapLocation": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "geopoint"
+              },
+              "optional": true
             }
           }
         },
         "optional": true
+      }
+    }
+  },
+  {
+    "name": "geopoint",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "geopoint"
+          }
+        },
+        "lat": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "lng": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "alt": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        }
       }
     }
   },
@@ -923,55 +968,10 @@
                 "type": "string"
               },
               "optional": true
-            },
-            "mapLocation": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "geopoint"
-              },
-              "optional": true
             }
           }
         },
         "optional": true
-      }
-    }
-  },
-  {
-    "name": "geopoint",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "geopoint"
-          }
-        },
-        "lat": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "number"
-          },
-          "optional": true
-        },
-        "lng": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "number"
-          },
-          "optional": true
-        },
-        "alt": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "number"
-          },
-          "optional": true
-        }
       }
     }
   },
