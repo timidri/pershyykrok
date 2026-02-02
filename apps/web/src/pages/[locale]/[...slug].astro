@@ -11,6 +11,7 @@ type Locale = (typeof LOCALES)[number];
 type SlugDoc = { locale: string; slug: string };
 
 export async function getStaticPaths() {
+  const LOCALES = ['ua', 'ru'] as const;
   const docs = await client.fetch<SlugDoc[]>(allPageSlugsQuery);
   if (!docs || docs.length === 0) return [];
   return docs

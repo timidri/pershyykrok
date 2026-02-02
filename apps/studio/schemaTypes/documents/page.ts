@@ -4,6 +4,16 @@ export default defineType({
   name: 'page',
   title: 'Generic Page',
   type: 'document',
+  preview: {
+    select: { title: 'title', slug: 'slug.current', language: 'language' },
+    prepare({ title, slug, language }) {
+      const parts = [language, slug].filter(Boolean)
+      return {
+        title: title ?? 'Untitled',
+        subtitle: parts.length > 0 ? parts.join(' · ') : undefined,
+      }
+    },
+  },
   fields: [
     {
       name: 'language',

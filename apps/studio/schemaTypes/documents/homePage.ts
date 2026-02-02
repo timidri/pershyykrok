@@ -4,6 +4,15 @@ export default defineType({
   name: 'homePage',
   title: 'Home Page',
   type: 'document',
+  preview: {
+    select: { title: 'title', language: 'language' },
+    prepare({ title, language }) {
+      return {
+        title: title ?? 'Untitled',
+        subtitle: language ?? undefined,
+      }
+    },
+  },
   fields: [
     {
       name: 'language',
