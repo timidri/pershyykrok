@@ -24,6 +24,21 @@ export default defineType({
         {
           type: 'object',
           title: 'Link',
+          preview: {
+            select: {
+              label: 'label',
+              refTitle: 'link.title',
+              refSlug: 'link.slug.current',
+              refLang: 'link.language',
+            },
+            prepare({ label, refTitle, refSlug, refLang }) {
+              const parts = [refLang, refSlug].filter(Boolean)
+              return {
+                title: label || refTitle || 'Link',
+                subtitle: parts.length > 0 ? parts.join(' · ') : undefined,
+              }
+            },
+          },
           fields: [
             { name: 'label', type: 'string', title: 'Label' },
             { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }] }
@@ -36,9 +51,24 @@ export default defineType({
       title: 'Main Menu (Ukrainian)',
       type: 'array',
       of: [
-         {
+        {
           type: 'object',
           title: 'Link',
+          preview: {
+            select: {
+              label: 'label',
+              refTitle: 'link.title',
+              refSlug: 'link.slug.current',
+              refLang: 'link.language',
+            },
+            prepare({ label, refTitle, refSlug, refLang }) {
+              const parts = [refLang, refSlug].filter(Boolean)
+              return {
+                title: label || refTitle || 'Link',
+                subtitle: parts.length > 0 ? parts.join(' · ') : undefined,
+              }
+            },
+          },
           fields: [
             { name: 'label', type: 'string', title: 'Label' },
             { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }] }
