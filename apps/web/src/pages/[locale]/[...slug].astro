@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { client } from '../../lib/sanity';
-import { PortableText } from '@portabletext/react';
-import { portableTextBlockComponents } from '../../components/PortableTextComponents';
+import PortableText from '../../components/PortableText.astro';
 import type { PageBySlugQueryResult } from '../../sanity-types';
 import { pageBySlugQuery, allPageSlugsQuery } from '../../queries';
 
@@ -37,6 +36,6 @@ if (!data) return Astro.redirect('/404');
 
 <BaseLayout title={data.title ?? 'Page'} locale={locale as Locale} currentPath={`/${locale}/${slugStr}`}>
   <div class="max-w-3xl mx-auto px-8 py-16">
-    {data.body && <PortableText value={data.body} components={portableTextBlockComponents} />}
+    {data.body && <PortableText value={data.body} />}
   </div>
 </BaseLayout>

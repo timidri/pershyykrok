@@ -1,9 +1,9 @@
 import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
+import {structureTool, type StructureBuilder} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import { documentInternationalization } from '@sanity/document-internationalization'
-
+import {PortableTextEditorPlugins} from './plugins/pte'
 
 export default defineConfig({
   name: 'default',
@@ -15,9 +15,16 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+  form: {
+    components: {
+      portableText: {
+        plugins: PortableTextEditorPlugins,
+      },
+    },
+  },
   plugins: [
     structureTool({
-      structure: (S) =>
+      structure: (S: StructureBuilder) =>
         S.list()
           .title('Content')
           .items([

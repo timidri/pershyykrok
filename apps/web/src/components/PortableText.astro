@@ -1,0 +1,27 @@
+---
+import { PortableText as PortableTextInternal } from 'astro-portabletext';
+import type { BlockContent } from '../sanity-types';
+import PortableTextImage from './portable-text/PortableTextImage.astro';
+import PortableTextMarkLeft from './portable-text/PortableTextMarkLeft.astro';
+import PortableTextMarkCenter from './portable-text/PortableTextMarkCenter.astro';
+import PortableTextMarkRight from './portable-text/PortableTextMarkRight.astro';
+
+interface Props {
+  value: BlockContent;
+}
+
+const components = {
+  type: {
+    image: PortableTextImage,
+  },
+  mark: {
+    left: PortableTextMarkLeft,
+    center: PortableTextMarkCenter,
+    right: PortableTextMarkRight,
+  },
+};
+
+const { value } = Astro.props;
+---
+
+<PortableTextInternal value={value} components={components} />

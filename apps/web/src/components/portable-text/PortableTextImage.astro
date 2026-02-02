@@ -1,0 +1,26 @@
+---
+import { urlForImage } from '../../lib/sanity';
+
+const { node } = Astro.props;
+const value = node as { asset?: { _ref?: string }; caption?: string } | undefined;
+let imageUrl: string | null = null;
+let caption: string | undefined;
+if (value?.asset) {
+  const url = urlForImage(value).width(800).url();
+  if (url) {
+    imageUrl = url;
+    caption = value.caption;
+  }
+}
+---
+
+{imageUrl && (
+  <figure class="my-6">
+    <img src={imageUrl} alt={caption ?? ''} class="w-full rounded" />
+    {caption && (
+      <figcaption class="mt-2 text-body text-gray-600 text-center">
+        {caption}
+      </figcaption>
+    )}
+  </figure>
+)}

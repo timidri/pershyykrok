@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { client } from '../../lib/sanity';
-import { PortableText } from '@portabletext/react';
-import { portableTextBlockComponents } from '../../components/PortableTextComponents';
+import PortableText from '../../components/PortableText.astro';
 import type { HomePageQueryResult, SiteSettingsQueryResult } from '../../sanity-types';
 import { homePageQuery, siteSettingsQuery } from '../../queries';
 
@@ -51,7 +50,7 @@ const mapEmbedUrl =
   <div class="max-w-5xl mx-auto px-6 sm:px-8 py-16">
     <div class="intro space-y-10">
       {data.introText && (
-        <PortableText value={data.introText} components={portableTextBlockComponents} />
+        <PortableText value={data.introText} />
       )}
     </div>
 
