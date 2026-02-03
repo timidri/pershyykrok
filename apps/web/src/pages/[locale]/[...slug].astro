@@ -1,21 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageContent from '../../components/PageContent.astro';
+import { allPageSlugsQuery } from '../../queries';
+import { fetchPageBySlugData } from '../../lib/content';
 import { client } from '../../lib/sanity';
-import PortableText from '../../components/PortableText.astro';
-import type { PageBySlugQueryResult } from '../../sanity-types';
-import { pageBySlugQuery, allPageSlugsQuery } from '../../queries';
-
-const LOCALES = ['ua', 'ru'] as const;
-type Locale = (typeof LOCALES)[number];
+import { assertLocaleOrRedirect, isLocale } from '../../lib/locale';
 
 type SlugDoc = { locale: string; slug: string };
 
 export async function getStaticPaths() {
-  const LOCALES = ['ua', 'ru'] as const;
   const docs = await client.fetch<SlugDoc[]>(allPageSlugsQuery);
   if (!docs || docs.length === 0) return [];
   return docs
-    .filter((d) => d.locale && d.slug && LOCALES.includes(d.locale as Locale))
+    .filter((d) => d.locale && d.slug && isLocale(d.locale))
     .map((d) => ({
       params: { locale: d.locale, slug: d.slug },
     }));
@@ -23,20 +20,20 @@ export async function getStaticPaths() {
 
 const { locale, slug } = Astro.params as { locale: string; slug: string | undefined };
 
-if (!locale || !LOCALES.includes(locale as Locale)) {
-  return Astro.redirect('/404');
-}
+const localeValue = assertLocaleOrRedirect(locale, Astro.redirect);
 
 const slugStr = slug ?? '';
-if (!slugStr) return Astro.redirect(`/${locale}`);
+if (!slugStr) return Astro.redirect(`/${localeValue}`);
 
-const data = await client.fetch<PageBySlugQueryResult>(pageBySlugQuery, { locale, slug: slugStr });
+const data = await fetchPageBySlugData({ locale: localeValue, slug: slugStr });
 
 if (!data) return Astro.redirect('/404');
 ---
 
-<BaseLayout title={data.title ?? 'Page'} locale={locale as Locale} currentPath={`/${locale}/${slugStr}`}>
-  <div class="max-w-3xl mx-auto px-8 py-16">
-    {data.body && <PortableText value={data.body} />}
-  </div>
+<BaseLayout
+  title={data.title ?? 'Page'}
+  locale={localeValue}
+  currentPath={`/${localeValue}/${slugStr}`}
+>
+  <PageContent data={data} />
 </BaseLayout>

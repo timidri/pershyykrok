@@ -1,117 +1,23 @@
 ---
+import HomePageContent from '../../components/HomePageContent.astro';
+import { fetchHomePageData } from '../../lib/content';
+import { assertLocaleOrRedirect } from '../../lib/locale';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { client } from '../../lib/sanity';
-import PortableText from '../../components/PortableText.astro';
-import type { HomePageQueryResult, SiteSettingsQueryResult } from '../../sanity-types';
-import { homePageQuery, siteSettingsQuery } from '../../queries';
-
-const LOCALES = ['ua', 'ru'] as const;
-type Locale = (typeof LOCALES)[number];
 
 export function getStaticPaths() {
   return [{ params: { locale: 'ua' } }, { params: { locale: 'ru' } }];
 }
 
 const { locale } = Astro.params as { locale: string };
-if (!locale || !LOCALES.includes(locale as Locale)) {
-  return Astro.redirect('/404');
-}
+const localeValue = assertLocaleOrRedirect(locale, Astro.redirect);
 
-const [data, siteSettings] = await Promise.all([
-  client.fetch<HomePageQueryResult>(homePageQuery, { locale }),
-  client.fetch<SiteSettingsQueryResult | null>(siteSettingsQuery),
-]);
+const { data, siteSettings } = await fetchHomePageData({ locale: localeValue });
 
 if (!data) return Astro.redirect('/404');
 
 const contact = siteSettings?.contact ?? null;
-const t = {
-  ua: { when: 'Коли', where: 'Де', languages: 'Мови', phone: 'Телефон', callUs: 'Зателефонуйте нам' },
-  ru: { when: 'Когда', where: 'Где', languages: 'Языки', phone: 'Телефон', callUs: 'Позвоните нам' },
-}[locale as Locale];
-
-const mapLocation = siteSettings?.contact?.mapLocation;
-const hasMap = mapLocation && mapLocation.lat != null && mapLocation.lng != null;
-const mapBbox = hasMap
-  ? [
-      (mapLocation!.lng! - 0.008).toFixed(5),
-      (mapLocation!.lat! - 0.005).toFixed(5),
-      (mapLocation!.lng! + 0.008).toFixed(5),
-      (mapLocation!.lat! + 0.005).toFixed(5),
-    ].join(',')
-  : '';
-const mapMarker = hasMap ? `${mapLocation!.lat!.toFixed(5)},${mapLocation!.lng!.toFixed(5)}` : '';
-const mapEmbedUrl =
-  hasMap &&
-  `https://www.openstreetmap.org/export/embed.html?bbox=${mapBbox}&layer=mapnik&marker=${mapMarker}`;
 ---
 
-<BaseLayout title={data.title ?? 'Home'} locale={locale as Locale} currentPath={`/${locale}`}>
-  <div class="max-w-5xl mx-auto px-6 sm:px-8 py-16">
-    <div class="intro space-y-10">
-      {data.introText && (
-        <PortableText value={data.introText} />
-      )}
-    </div>
-
-    {data.meetingSection && (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 items-start">
-        <div class="space-y-4">
-          <h3 class="text-lg font-semibold">{data.meetingSection.sectionTitle}</h3>
-
-          <div class="flex gap-2">
-            <span class="font-semibold shrink-0">{t.when}:</span>
-            <span>{data.meetingSection.time}</span>
-          </div>
-
-          <div class="flex gap-2">
-            <span class="font-semibold shrink-0">{t.where}:</span>
-            <span>{contact?.address ?? ''}</span>
-          </div>
-
-          <div class="flex gap-2">
-            <span class="font-semibold shrink-0">{t.languages}:</span>
-            <span>{data.meetingSection.languages}</span>
-          </div>
-
-          <div class="flex gap-2">
-            <span class="font-semibold shrink-0">{t.phone}:</span>
-            <a href={contact?.phone ? `tel:${contact.phone}` : '#'} class="text-[#1371AF] hover:underline">
-              {contact?.phone ?? ''}
-            </a>
-          </div>
-
-          {contact?.phone && (
-            <div class="pt-2">
-              <a
-                href={`tel:${contact.phone}`}
-                class="inline-block px-4 py-2 text-white rounded hover:opacity-90 transition-opacity"
-                style="background-color: #1371AF;"
-              >
-                {t.callUs}
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div class="min-h-[300px] rounded overflow-hidden bg-gray-100">
-          {mapEmbedUrl ? (
-            <iframe
-              title="Map"
-              src={mapEmbedUrl}
-              class="w-full h-[300px] border-0"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            />
-          ) : (
-            <div class="w-full h-[300px] flex items-center justify-center">
-              <span class="text-gray-500 text-sm">
-                {hasMap ? null : (mapLocation ? 'Map: invalid coordinates' : 'Map: add coordinates in Studio')}
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-    )}
-  </div>
+<BaseLayout title={data.title ?? 'Home'} locale={localeValue} currentPath={`/${localeValue}`}>
+  <HomePageContent data={data} contact={contact} locale={localeValue} />
 </BaseLayout>

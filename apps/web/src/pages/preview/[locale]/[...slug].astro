@@ -1,50 +1,30 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getClient } from '../../../lib/sanity';
-import PortableText from '../../../components/PortableText.astro';
-import type { PageBySlugQueryResult } from '../../../sanity-types';
-import { pageBySlugQuery } from '../../../queries';
+import PageContent from '../../../components/PageContent.astro';
+import { fetchPageBySlugData } from '../../../lib/content';
+import { assertLocaleOrRedirect } from '../../../lib/locale';
+import { requirePreview } from '../../../lib/preview';
 
 export const prerender = false;
 
-const LOCALES = ['ua', 'ru'] as const;
-type Locale = (typeof LOCALES)[number];
-
 const { locale, slug } = Astro.params as { locale: string; slug: string | undefined };
 
-if (!locale || !LOCALES.includes(locale as Locale)) {
-  return Astro.redirect('/404');
-}
-
-const previewSecret = import.meta.env.SANITY_PREVIEW_SECRET;
-const previewParam = Astro.url.searchParams.get('preview');
-const secretParam = Astro.url.searchParams.get('secret');
-const isPreview = previewParam === '1' && !!previewSecret && secretParam === previewSecret;
-
-if (!isPreview) {
-  return new Response('Unauthorized', { status: 401 });
-}
-
-if (!import.meta.env.SANITY_API_READ_TOKEN) {
-  return new Response('Preview token missing on server', { status: 500 });
-}
+const localeValue = assertLocaleOrRedirect(locale, Astro.redirect);
+requirePreview(Astro);
 
 const slugStr = slug ?? '';
-if (!slugStr) return Astro.redirect(`/${locale}`);
+if (!slugStr) return Astro.redirect(`/${localeValue}`);
 
-const previewClient = getClient({ preview: true });
-const data = await previewClient.fetch<PageBySlugQueryResult>(pageBySlugQuery, { locale, slug: slugStr });
+const data = await fetchPageBySlugData({ locale: localeValue, slug: slugStr, preview: true });
 
 if (!data) return Astro.redirect('/404');
 ---
 
 <BaseLayout
   title={data.title ?? 'Page'}
-  locale={locale as Locale}
-  currentPath={`/${locale}/${slugStr}`}
+  locale={localeValue}
+  currentPath={`/${localeValue}/${slugStr}`}
   isPreview={true}
 >
-  <div class="max-w-3xl mx-auto px-8 py-16">
-    {data.body && <PortableText value={data.body} />}
-  </div>
+  <PageContent data={data} />
 </BaseLayout>

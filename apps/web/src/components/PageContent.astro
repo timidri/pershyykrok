@@ -1,0 +1,14 @@
+---
+import PortableText from './PortableText.astro';
+import type { PageBySlugQueryResult } from '../sanity-types';
+
+interface Props {
+  data: PageBySlugQueryResult;
+}
+
+const { data } = Astro.props;
+---
+
+<div class="max-w-3xl mx-auto px-8 py-16">
+  {data.body && <PortableText value={data.body} />}
+</div>
