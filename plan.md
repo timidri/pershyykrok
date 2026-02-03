@@ -28,7 +28,7 @@ todos:
     status: completed
   - id: seo-config
     content: Add SEO configuration to siteSettings and ensure all needed information is there for optimal SEO; use that information where needed in the website
-    status: pending
+    status: completed
   - id: faq-page
     content: Add a FAQ page (schema, routing, Studio menu)
     status: pending

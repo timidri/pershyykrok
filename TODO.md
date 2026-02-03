@@ -12,10 +12,9 @@ Copy of the development plan todos so collaborators can see what is done and wha
 - [x] Style hero from introText; add Call us button; integrate map (static or iframe)
 - [x] Run Sanity typegen and fix TypeScript/Lint in web app
 - [x] Deploy web app to Vercel (monorepo root/build, output apps/web/dist); optional env for Sanity; Studio on Sanity hosting or separate
+- [x] Add SEO configuration to siteSettings and ensure all needed information is there for optimal SEO; use that information where needed in the website
 
 ## To do
-
-- [ ] Add SEO configuration to siteSettings and ensure all needed information is there for optimal SEO; use that information where needed in the website
 - [ ] Add a FAQ page (schema, routing, Studio menu)
 - [ ] Add a self-test page (schema, routing, Studio menu)
 - [ ] Add a preview feature (Studio → Vercel) so editors can open the site with draft content
