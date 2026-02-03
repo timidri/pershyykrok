@@ -67,13 +67,28 @@ export type SiteSettings = {
     website?: string;
     mapLocation?: Geopoint;
   };
-};
-
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
+  seo?: {
+    title?: {
+      ua?: string;
+      ru?: string;
+    };
+    description?: {
+      ua?: string;
+      ru?: string;
+    };
+    ogImage?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    ogImageAlt?: {
+      ua?: string;
+      ru?: string;
+    };
+    canonicalBaseUrl?: string;
+  };
 };
 
 export type SanityImageCrop = {
@@ -90,6 +105,13 @@ export type SanityImageHotspot = {
   y: number;
   height: number;
   width: number;
+};
+
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
 };
 
 export type BlockContent = Array<
@@ -271,9 +293,9 @@ export type AllSanitySchemaTypes =
   | PageReference
   | HomePageReference
   | SiteSettings
-  | Geopoint
   | SanityImageCrop
   | SanityImageHotspot
+  | Geopoint
   | BlockContent
   | TranslationMetadata
   | InternationalizedArrayReference
@@ -299,7 +321,7 @@ type ArrayOf<T> = Array<
 
 // Source: ../web/src/queries.ts
 // Variable: siteSettingsQuery
-// Query: *[_id == "siteSettings"][0]{  logo,  mainMenuRu[]{    label,    "link": link->{ _type, "slug": slug.current }  },  mainMenuUa[]{    label,    "link": link->{ _type, "slug": slug.current }  },  footerText,  "contact": coalesce(contact, footerContact)}
+// Query: *[_id == "siteSettings"][0]{  logo,  mainMenuRu[]{    label,    "link": link->{ _type, "slug": slug.current }  },  mainMenuUa[]{    label,    "link": link->{ _type, "slug": slug.current }  },  footerText,  "contact": coalesce(contact, footerContact),  seo{    title,    description,    ogImage,    ogImageAlt,    canonicalBaseUrl  }}
 export type SiteSettingsQueryResult =
   | {
       logo: null;
@@ -307,6 +329,7 @@ export type SiteSettingsQueryResult =
       mainMenuUa: null;
       footerText: null;
       contact: null;
+      seo: null;
     }
   | {
       logo: {
@@ -352,6 +375,28 @@ export type SiteSettingsQueryResult =
         website?: string;
         mapLocation?: Geopoint;
       } | null;
+      seo: {
+        title: {
+          ua?: string;
+          ru?: string;
+        } | null;
+        description: {
+          ua?: string;
+          ru?: string;
+        } | null;
+        ogImage: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        } | null;
+        ogImageAlt: {
+          ua?: string;
+          ru?: string;
+        } | null;
+        canonicalBaseUrl: string | null;
+      } | null;
     }
   | null;
 
@@ -390,7 +435,7 @@ export type AllPageSlugsQueryResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact)\n}': SiteSettingsQueryResult;
+    '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact),\n  seo{\n    title,\n    description,\n    ogImage,\n    ogImageAlt,\n    canonicalBaseUrl\n  }\n}': SiteSettingsQueryResult;
     '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection{\n    sectionTitle,\n    time,\n    languages\n  }\n}': HomePageQueryResult;
     '*[_type == "page" && language == $locale && slug.current == $slug][0]{\n  title,\n  body,\n  slug\n}': PageBySlugQueryResult;
     '*[_type == "page" && defined(slug.current)]{\n  "locale": language,\n  "slug": slug.current\n}': AllPageSlugsQueryResult;

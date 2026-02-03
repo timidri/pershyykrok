@@ -1,7 +1,7 @@
 ---
-import { client } from '../lib/sanity';
+import { client, urlForImage } from '../lib/sanity';
 import { siteSettingsQuery } from '../queries';
-import type { SiteSettingsQueryResult } from '../sanity-types';
+import type { SiteSettings, SiteSettingsQueryResult } from '../sanity-types';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -16,13 +16,47 @@ const { title, locale = 'ua', currentPath = `/${locale}` } = Astro.props;
 
 const siteSettings = await client.fetch<SiteSettingsQueryResult | null>(siteSettingsQuery);
 const htmlLang = locale === 'ua' ? 'uk' : 'ru';
+const seo = (siteSettings as { seo?: SiteSettings['seo'] } | null)?.seo;
+
+const defaultTitle = seo?.title?.[locale] ?? undefined;
+const normalizedPath = currentPath.startsWith('/') ? currentPath : `/${currentPath}`;
+const homepagePath = `/${locale}`;
+const isHome = normalizedPath === homepagePath || normalizedPath === `${homepagePath}/`;
+
+const metaTitle = isHome
+  ? defaultTitle
+  : title && defaultTitle
+  ? `${title} | ${defaultTitle}`
+  : title || defaultTitle;
+const metaDescription = seo?.description?.[locale] ?? undefined;
+
+const canonicalBase = seo?.canonicalBaseUrl?.replace(/\/$/, '');
+const canonicalUrl = canonicalBase ? `${canonicalBase}${normalizedPath}` : undefined;
+
+const ogImageUrl = seo?.ogImage
+  ? urlForImage(seo.ogImage).width(1200).height(630).fit('crop').url()
+  : undefined;
+const ogImageAlt = seo?.ogImageAlt?.[locale] ?? undefined;
 ---
 
 <html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{metaTitle}</title>
+    {metaDescription && <meta name="description" content={metaDescription} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {metaTitle && <meta property="og:title" content={metaTitle} />}
+    {metaDescription && <meta property="og:description" content={metaDescription} />}
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {metaTitle && <meta name="twitter:title" content={metaTitle} />}
+    {metaDescription && <meta name="twitter:description" content={metaDescription} />}
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+    {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

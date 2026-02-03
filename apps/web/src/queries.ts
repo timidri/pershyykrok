@@ -12,7 +12,14 @@ export const siteSettingsQuery = groq`*[_id == "siteSettings"][0]{
     "link": link->{ _type, "slug": slug.current }
   },
   footerText,
-  "contact": coalesce(contact, footerContact)
+  "contact": coalesce(contact, footerContact),
+  seo{
+    title,
+    description,
+    ogImage,
+    ogImageAlt,
+    canonicalBaseUrl
+  }
 }`;
 
 /** Home page for a locale (ru or ua). Pass $locale when fetching. */
