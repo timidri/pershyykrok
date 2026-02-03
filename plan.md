@@ -28,7 +28,11 @@ todos:
     status: completed
   - id: seo-config
     content: Add SEO configuration to siteSettings and ensure all needed information is there for optimal SEO; use that information where needed in the website
+<<<<<<< HEAD
     status: completed
+=======
+    status: pending
+>>>>>>> 8603ab7db05a695c266d1756cd1af63b26983cb8
   - id: faq-page
     content: Add a FAQ page (schema, routing, Studio menu)
     status: pending
@@ -241,4 +245,8 @@ Deploy the **web app** (Astro) to Vercel before continuing feature work. Studio 
 
 ## Nice to have (later)
 
+<<<<<<< HEAD
 - **Header logo: use Gimp PNG instead of SVG** – The mockup uses a PNG exported from Gimp (with Gimp’s anti-aliasing). Replacing the current SVG logo in Sanity with that PNG (e.g. 280×280 for 2× retina at 140px display) should match the mockup’s look and remove jagged edges. No code change required beyond uploading the PNG in Studio; current Header already requests logo at 80/140/280.
+=======
+- **Header logo: use Gimp PNG instead of SVG** – The mockup uses a PNG exported from Gimp (with Gimp’s anti-aliasing). Replacing the current SVG logo in Sanity with that PNG (e.g. 280×280 for 2× retina at 140px display) should match the mockup’s look and remove jagged edges. No code change required beyond uploading the PNG in Studio; current Header already requests logo at 80/140/280.
+>>>>>>> 8603ab7db05a695c266d1756cd1af63b26983cb8
