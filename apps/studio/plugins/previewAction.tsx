@@ -1,57 +1,13 @@
 import type { DocumentActionComponent, DocumentActionProps } from 'sanity';
-
-type PreviewDocument = {
-  _id?: string;
-  _type?: string;
-  language?: string;
-  slug?: { current?: string };
-};
-
-function buildPreviewUrl(doc: PreviewDocument) {
-  const baseUrl = import.meta.env.SANITY_STUDIO_PREVIEW_URL || '';
-  const secret = import.meta.env.SANITY_STUDIO_PREVIEW_SECRET;
-  const locale = doc.language || 'ua';
-
-  if (!secret || !baseUrl) {
-    return null;
-  }
-
-  const normalizedBase = baseUrl.replace(/\/$/, '');
-  const slug = doc.slug?.current;
-
-  const path =
-    doc._type === 'homePage'
-      ? `/preview/${locale}`
-      : slug
-      ? `/preview/${locale}/${slug}`
-      : null;
-
-  if (!path) {
-    return null;
-  }
-
-  const url = new URL(`${normalizedBase}${path}`);
-  url.searchParams.set('preview', '1');
-  url.searchParams.set('secret', secret);
-  if (doc._id) {
-    url.searchParams.set('id', doc._id);
-  }
-  return url.toString();
-}
+import { buildPreviewUrl, getMissingPreviewEnv } from '../lib/previewUrl';
 
 export const previewAction: DocumentActionComponent = (props: DocumentActionProps) => {
   const { draft, published } = props;
-  const doc = (draft || published) as PreviewDocument | undefined;
+  const doc = (draft || published) as { _type?: string; _id?: string; language?: string; slug?: { current?: string } } | undefined;
   const docType = doc?._type;
   const isSupportedType = docType === 'homePage' || docType === 'page';
 
-  const missingEnv: string[] = [];
-  if (!import.meta.env.SANITY_STUDIO_PREVIEW_URL) {
-    missingEnv.push('SANITY_STUDIO_PREVIEW_URL');
-  }
-  if (!import.meta.env.SANITY_STUDIO_PREVIEW_SECRET) {
-    missingEnv.push('SANITY_STUDIO_PREVIEW_SECRET');
-  }
+  const missingEnv = getMissingPreviewEnv();
 
   const previewUrl = doc ? buildPreviewUrl(doc) : null;
   const disabled = !isSupportedType || !previewUrl;

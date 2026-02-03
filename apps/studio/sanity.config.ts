@@ -5,6 +5,7 @@ import {schemaTypes} from './schemaTypes'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import {PortableTextEditorPlugins} from './plugins/pte'
 import { previewAction } from './plugins/previewAction'
+import { PreviewPane } from './components/PreviewPane'
 
 export default defineConfig({
   name: 'default',
@@ -43,6 +44,10 @@ export default defineConfig({
             S.documentTypeListItem('homePage').title('Home Page'),
             S.documentTypeListItem('page').title('Pages'),
           ]),
+      defaultDocumentNode: (S, { schemaType }) =>
+        schemaType === 'homePage' || schemaType === 'page'
+          ? S.document().views([S.view.form(), S.view.component(PreviewPane).title('Preview')])
+          : S.document(),
     }),
     visionTool(),
     documentInternationalization({
