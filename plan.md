@@ -41,7 +41,7 @@ todos:
     status: pending
   - id: preview-studio-vercel
     content: Add a preview feature (Studio -> Vercel) so editors can open the site with draft content
-    status: pending
+    status: completed
   - id: deploy-studio-vercel
     content: Add a deploy feature (Studio -> Vercel) to trigger or link to Vercel deploy from Studio
     status: pending

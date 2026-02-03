@@ -4,6 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import {PortableTextEditorPlugins} from './plugins/pte'
+import { previewAction } from './plugins/previewAction'
 
 export default defineConfig({
   name: 'default',
@@ -14,6 +15,9 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+  },
+  document: {
+    actions: (prev) => [...prev, previewAction],
   },
   form: {
     components: {

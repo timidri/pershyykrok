@@ -12,7 +12,7 @@ Multilingual (Ukrainian/Russian) content site with a Sanity Studio backend and a
 
 - **Monorepo**: [pnpm](https://pnpm.io) workspaces (`apps/studio`, `apps/web`).
 - **CMS**: [Sanity](https://sanity.io) v5 — Studio for content, GROQ, document i18n (`@sanity/document-internationalization`), block content with alignment marks and a PTE plugin for mutually exclusive alignment.
-- **Frontend**: [Astro](https://astro.build) v5 — static output, [Tailwind CSS](https://tailwindcss.com), [astro-portabletext](https://github.com/theisel/astro-portabletext) for rich text (no React).
+- **Frontend**: [Astro](https://astro.build) v5 — hybrid output (static pages + server preview), [Tailwind CSS](https://tailwindcss.com), [astro-portabletext](https://github.com/theisel/astro-portabletext) for rich text (no React).
 - **Types**: Sanity typegen writes query result types to `apps/web/src/sanity-types.ts`; a watch script can regenerate on schema/query changes.
 
 ## Installation
@@ -47,6 +47,20 @@ Multilingual (Ukrainian/Russian) content site with a Sanity Studio backend and a
    (watches `apps/studio/schemaTypes/**/*.ts` and `apps/web/src/queries.ts`, then runs studio extract + typegen.)
 
 Optional: if you use Sanity preview or a read token, set the needed env vars (e.g. in `apps/web` or root) as per your setup.
+
+## Preview setup (Studio → Website)
+
+This repo includes a Studio action that opens a draft preview using a server-rendered preview route on the website.
+
+### Website env vars (apps/web)
+
+- `SANITY_API_READ_TOKEN`: Read token with access to drafts.
+- `SANITY_PREVIEW_SECRET`: Shared secret for preview URLs.
+
+### Studio env vars (apps/studio)
+
+- `SANITY_STUDIO_PREVIEW_URL`: Base URL of the website (e.g. `https://pershyykrok.nl`).
+- `SANITY_STUDIO_PREVIEW_SECRET`: Must match `SANITY_PREVIEW_SECRET`.
 
 ## Deploy on Vercel (website + studio)
 

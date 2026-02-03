@@ -1,5 +1,5 @@
 ---
-import { client, urlForImage } from '../lib/sanity';
+import { getClient, urlForImage } from '../lib/sanity';
 import { siteSettingsQuery } from '../queries';
 import type { SiteSettings, SiteSettingsQueryResult } from '../sanity-types';
 import Header from '../components/Header.astro';
@@ -10,11 +10,14 @@ interface Props {
   title: string;
   locale?: 'ru' | 'ua';
   currentPath?: string;
+  isPreview?: boolean;
 }
 
-const { title, locale = 'ua', currentPath = `/${locale}` } = Astro.props;
+const { title, locale = 'ua', currentPath = `/${locale}`, isPreview = false } = Astro.props;
 
-const siteSettings = await client.fetch<SiteSettingsQueryResult | null>(siteSettingsQuery);
+const siteSettings = await getClient({ preview: isPreview }).fetch<SiteSettingsQueryResult | null>(
+  siteSettingsQuery
+);
 const htmlLang = locale === 'ua' ? 'uk' : 'ru';
 const seo = (siteSettings as { seo?: SiteSettings['seo'] } | null)?.seo;
 
@@ -44,6 +47,7 @@ const ogImageAlt = seo?.ogImageAlt?.[locale] ?? undefined;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{metaTitle}</title>
+    {isPreview && <meta name="robots" content="noindex,nofollow" />}
     {metaDescription && <meta name="description" content={metaDescription} />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:type" content="website" />
