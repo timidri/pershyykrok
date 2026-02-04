@@ -94,7 +94,7 @@ function hrefForLink(link: { _type: string; slug: string | null } | null, locale
 
       <div
         id="mobile-menu"
-        class="hidden absolute right-0 mt-3 w-64 border border-gray-200 bg-white shadow-lg rounded-lg"
+        class="hidden absolute right-0 mt-3 w-max max-w-[calc(100vw-2rem)] border border-gray-200 bg-white shadow-lg rounded-lg"
       >
         <div class="px-5 py-5 space-y-5">
           {menu && menu.length > 0 && (
@@ -102,7 +102,7 @@ function hrefForLink(link: { _type: string; slug: string | null } | null, locale
               {menu.map((item) => (
                 <a
                   href={hrefForLink(item.link, locale)}
-                  class="text-sm text-gray-700 hover:text-gray-900 underline-offset-2 hover:underline"
+                  class="text-sm text-gray-700 hover:text-gray-900 underline-offset-2 hover:underline whitespace-nowrap"
                 >
                   {item.label ?? ''}
                 </a>

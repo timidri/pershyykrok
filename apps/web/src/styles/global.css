@@ -26,6 +26,33 @@
   }
 }
 
+@media (max-width: 640px) {
+  h1 {
+    font-size: 44px;
+    line-height: 58px;
+  }
+  h2 {
+    font-size: 36px;
+    line-height: 43px;
+  }
+  h3 {
+    font-size: 23px;
+    line-height: 34px;
+  }
+  h4 {
+    font-size: 18px;
+    line-height: 23px;
+  }
+  h5 {
+    font-size: 15px;
+    line-height: 20px;
+  }
+  h6 {
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+
 /* Hero/intro: subheading centered, body justified, spacing from layout */
 .intro h3 {
   @apply text-center;
