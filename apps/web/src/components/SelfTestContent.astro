@@ -15,61 +15,74 @@ interface Props {
 }
 
 const { intro, questions, resultCopy, contact, locale } = Astro.props;
-const label = locale === 'ua' ? 'Кількість відповідей “Так”' : 'Количество ответов «Да»';
 const yesLabel = locale === 'ua' ? 'Так' : 'Да';
 const noLabel = locale === 'ua' ? 'Ні' : 'Нет';
+const resultsLabel = locale === 'ua' ? 'Показати результати' : 'Показать результаты';
+const yesCountLabel = locale === 'ua' ? 'Так' : 'Да';
+const noCountLabel = locale === 'ua' ? 'Ні' : 'Нет';
 const callUsLabel = locale === 'ua' ? 'Зателефонуйте нам' : 'Позвоните нам';
 ---
 
 <div class="max-w-3xl mx-auto px-8 py-16 space-y-8" data-self-test>
   {intro && <PortableText value={intro} />}
 
-  <div class="text-body text-gray-700">
-    <span>{label}:</span>{' '}
-    <strong class="text-body text-gray-900 font-semibold" data-self-test-count>0</strong>
-    {questions && questions.length > 0 ? ` / ${questions.length}` : ''}
-  </div>
-
   {questions && questions.length > 0 && (
     <div class="space-y-6">
       {questions.map((q, idx) => (
-        <div class="space-y-2">
+        <div class="space-y-3" data-self-test-question>
           <div class="font-medium">{q.text}</div>
-          <div class="flex gap-6 text-sm">
-            <label class="inline-flex items-center gap-2">
-              <input
-                type="radio"
-                name={`self-test-${idx}`}
-                value="yes"
-                class="h-4 w-4 accent-[#1371AF]"
-                data-self-test-input
-              />
-              <span>{yesLabel}</span>
-            </label>
-            <label class="inline-flex items-center gap-2">
-              <input
-                type="radio"
-                name={`self-test-${idx}`}
-                value="no"
-                class="h-4 w-4 accent-[#1371AF]"
-                data-self-test-input
-              />
-              <span>{noLabel}</span>
-            </label>
+          <div class="flex gap-3 text-sm items-center flex-wrap">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-1 text-sm text-gray-700 hover:border-[#1371AF] hover:text-[#1371AF] transition-colors min-w-[3.25rem]"
+              data-answer
+              data-question={idx}
+              data-value="yes"
+            >
+              {yesLabel}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-1 text-sm text-gray-700 hover:border-[#1371AF] hover:text-[#1371AF] transition-colors min-w-[3.25rem]"
+              data-answer
+              data-question={idx}
+              data-value="no"
+            >
+              {noLabel}
+            </button>
           </div>
         </div>
       ))}
     </div>
   )}
 
+  {questions && questions.length > 0 && (
+    <div class="pt-2 flex flex-wrap items-center gap-4">
+      <button
+        type="button"
+        class="inline-flex items-center justify-center rounded px-5 py-2 text-white transition-opacity disabled:opacity-50"
+        style="background-color: #1371AF;"
+        data-self-test-submit
+        disabled
+      >
+        {resultsLabel}
+      </button>
+      <div class="hidden text-sm text-gray-700" data-self-test-results>
+        {yesCountLabel}: <strong data-self-test-yes>0</strong>
+        {' · '}
+        {noCountLabel}: <strong data-self-test-no>0</strong>
+      </div>
+    </div>
+  )}
+
   {resultCopy && (
-    <div class="pt-4 border-t border-gray-200">
+    <div class="pt-3 hidden" data-self-test-copy>
       <PortableText value={resultCopy} />
     </div>
   )}
 
   {contact?.phone && (
-    <div class="pt-2 flex justify-center">
+    <div class="pt-2 flex justify-center hidden" data-self-test-call>
       <a
         href={`tel:${contact.phone}`}
         class="inline-block px-4 py-2 text-white rounded hover:opacity-90 transition-opacity"
@@ -84,15 +97,65 @@ const callUsLabel = locale === 'ua' ? 'Зателефонуйте нам' : 'П�
 <script type="module" is:inline>
   const container = document.querySelector('[data-self-test]');
   if (container) {
-    const countEl = container.querySelector('[data-self-test-count]');
-    const inputs = container.querySelectorAll('[data-self-test-input]');
-    const update = () => {
-      let total = 0;
-      inputs.forEach((input) => {
-        if (input instanceof HTMLInputElement && input.checked && input.value === 'yes') total += 1;
+    const buttons = Array.from(container.querySelectorAll('[data-answer]'));
+    const submit = container.querySelector('[data-self-test-submit]');
+    const results = container.querySelector('[data-self-test-results]');
+    const resultsCopy = container.querySelector('[data-self-test-copy]');
+    const yesEl = container.querySelector('[data-self-test-yes]');
+    const noEl = container.querySelector('[data-self-test-no]');
+    const totalQuestions = container.querySelectorAll('[data-self-test-question]').length;
+    const answers = new Array(totalQuestions).fill(null);
+
+    const updateCounts = () => {
+      let yesTotal = 0;
+      let answered = 0;
+      answers.forEach((value) => {
+        if (value) {
+          answered += 1;
+          if (value === 'yes') yesTotal += 1;
+        }
       });
-      if (countEl) countEl.textContent = String(total);
+      if (submit instanceof HTMLButtonElement) {
+        submit.disabled = answered !== totalQuestions;
+      }
+      if (yesEl) yesEl.textContent = String(yesTotal);
+      if (noEl) noEl.textContent = String(answered - yesTotal);
     };
-    inputs.forEach((input) => input.addEventListener('change', update));
+
+    const setSelected = (questionIndex, value) => {
+      buttons.forEach((button) => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        if (Number(button.dataset.question) !== questionIndex) return;
+        const isActive = button.dataset.value === value;
+        button.classList.toggle('bg-[#1371AF]', isActive);
+        button.classList.toggle('border-[#1371AF]', isActive);
+        button.classList.toggle('text-white', isActive);
+        button.classList.toggle('text-gray-700', !isActive);
+      });
+    };
+
+    buttons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+      button.addEventListener('click', () => {
+        const questionIndex = Number(button.dataset.question);
+        const value = button.dataset.value;
+        if (!Number.isFinite(questionIndex) || !value) return;
+        answers[questionIndex] = value;
+        setSelected(questionIndex, value);
+        updateCounts();
+      });
+    });
+
+    if (submit instanceof HTMLButtonElement) {
+      submit.addEventListener('click', () => {
+        if (submit.disabled) return;
+        if (results) results.classList.remove('hidden');
+        if (resultsCopy) resultsCopy.classList.remove('hidden');
+        const call = container.querySelector('[data-self-test-call]');
+        if (call) call.classList.remove('hidden');
+      });
+    }
+
+    updateCounts();
   }
 </script>
