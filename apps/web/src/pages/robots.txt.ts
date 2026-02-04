@@ -1,8 +1,10 @@
-export const prerender = true;
+export const prerender = false;
 
-export function GET() {
+export function GET({ request }: { request: Request }) {
+  const origin = new URL(request.url).origin;
   const body = `User-agent: *
 Allow: /
+Sitemap: ${origin}/sitemap.xml
 `;
 
   return new Response(body, {
