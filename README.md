@@ -65,6 +65,20 @@ This repo includes a Studio action that opens a draft preview using a server-ren
 
 To create the hook in Vercel: Project → Settings → Git → Deploy Hooks.
 
+## Sanity schema deploy (CI)
+
+This repo includes a GitHub Action that deploys the Sanity schema **only when schema files change** on `main`.
+
+- Workflow: `.github/workflows/deploy-sanity-schema.yml`
+- Trigger: `apps/studio/schemaTypes/**` and `apps/studio/sanity.config.ts`
+- Manual run: available via **Actions → Deploy Sanity Schema → Run workflow** (this is what `workflow_dispatch` enables).
+
+### Required GitHub secret
+
+Add a repository secret named `SANITY_AUTH_TOKEN` with a **Developer** token (Editor is not sufficient for schema deploy).
+
+Create it in Sanity: Project → **API** → **Tokens** → **New token** → **Role: Developer**.
+
 ## Deploy on Vercel (website + studio)
 
 Use **one repo, two Vercel projects**. Connect the same GitHub repo to both projects and set a different **Root Directory** for each.
