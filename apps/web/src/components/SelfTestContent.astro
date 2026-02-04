@@ -24,9 +24,9 @@ const callUsLabel = locale === 'ua' ? 'Зателефонуйте нам' : 'П�
 <div class="max-w-3xl mx-auto px-8 py-16 space-y-8" data-self-test>
   {intro && <PortableText value={intro} />}
 
-  <div class="text-sm text-gray-600">
+  <div class="text-body text-gray-700">
     <span>{label}:</span>{' '}
-    <strong class="text-2xl text-gray-900" data-self-test-count>0</strong>
+    <strong class="text-body text-gray-900 font-semibold" data-self-test-count>0</strong>
     {questions && questions.length > 0 ? ` / ${questions.length}` : ''}
   </div>
 
