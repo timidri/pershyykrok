@@ -18,8 +18,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['"Inknut Antiqua"', 'Georgia', 'serif'],
-        body: ['"Acumin Pro"', 'Georgia', 'serif'],
+        heading: ['"PT Serif"', 'Georgia', 'serif'],
+        body: ['"PT Serif"', 'Georgia', 'serif'],
       },
       fontSize: {
         h1: ['59px', { lineHeight: '78px' }],

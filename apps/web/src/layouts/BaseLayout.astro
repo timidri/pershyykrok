@@ -66,21 +66,18 @@ const ogImageAlt = seo?.ogImageAlt?.[locale] ?? undefined;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&display=swap"
+      as="font"
+      type="font/woff2"
+      href="/fonts/pt-serif/pt-serif-v19-cyrillic_cyrillic-ext_latin_latin-ext-regular.woff2"
+      crossorigin
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/pt-serif/pt-serif-v19-cyrillic_cyrillic-ext_latin_latin-ext-700.woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&display=swap"
-      />
-    </noscript>
     <!-- Acumin Pro via Adobe Fonts: replace YOUR_ADOBE_KIT_ID with your kit ID from use.typekit.net -->
   </head>
   <body class="font-body text-body antialiased text-gray-900 flex flex-col min-h-screen">

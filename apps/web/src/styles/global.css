@@ -2,9 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "PT Serif";
+  src: url("/fonts/pt-serif/pt-serif-v19-cyrillic_cyrillic-ext_latin_latin-ext-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PT Serif";
+  src: url("/fonts/pt-serif/pt-serif-v19-cyrillic_cyrillic-ext_latin_latin-ext-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-light;
+    @apply font-heading font-normal;
   }
   h1 {
     @apply text-h1;
