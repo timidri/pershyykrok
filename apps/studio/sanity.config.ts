@@ -5,7 +5,9 @@ import {schemaTypes} from './schemaTypes'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import {PortableTextEditorPlugins} from './plugins/pte'
 import { previewAction } from './plugins/previewAction'
+import { deployAction } from './plugins/deployAction'
 import { PreviewPane } from './components/PreviewPane'
+import { DeployToolbar } from './components/DeployToolbar'
 
 export default defineConfig({
   name: 'default',
@@ -13,12 +15,17 @@ export default defineConfig({
 
   projectId: 'n1ug74wc',
   dataset: 'production',
+  studio: {
+    components: {
+      navbar: DeployToolbar,
+    },
+  },
 
   schema: {
     types: schemaTypes,
   },
   document: {
-    actions: (prev) => [...prev, previewAction],
+    actions: (prev) => [...prev, previewAction, deployAction],
   },
   form: {
     components: {
