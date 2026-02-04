@@ -16,24 +16,24 @@ const lines = footerText ? footerText.trim().split(/\r?\n/).filter(Boolean) : []
 <footer class="border-t border-gray-200 mt-auto" style="background-color: #8FB6DD;">
   <div class="max-w-6xl mx-auto px-6 sm:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-      <div class="text-body text-gray-800 space-y-1">
+      <div class="text-body text-gray-900 space-y-1">
         {lines.map((line) => (
           <p>{line}</p>
         ))}
       </div>
       {contact && (contact.address || contact.phone || contact.website) && (
-        <div class="text-body text-gray-800 space-y-1 shrink-0">
+        <div class="text-body text-gray-900 space-y-1 shrink-0">
           {contact.address && <p>{contact.address}</p>}
           {contact.phone && (
             <p>
-              <a href={`tel:${contact.phone}`} class="text-[#0B4A78] hover:underline underline-offset-2 font-medium">
+              <a href={`tel:${contact.phone}`} class="text-[#06345A] hover:underline underline-offset-2 font-medium">
                 {contact.phone}
               </a>
             </p>
           )}
           {contact.website && (
             <p>
-              <a href={contact.website.startsWith('http') ? contact.website : `https://${contact.website}`} target="_blank" rel="noopener noreferrer" class="text-[#0B4A78] hover:underline underline-offset-2 font-medium">
+              <a href={contact.website.startsWith('http') ? contact.website : `https://${contact.website}`} target="_blank" rel="noopener noreferrer" class="text-[#06345A] hover:underline underline-offset-2 font-medium">
                 {contact.website.replace(/^https?:\/\//, '')}
               </a>
             </p>
