@@ -59,7 +59,7 @@ if (!data && !faq && !selfTest) return Astro.redirect('/404');
   isPreview={true}
 >
   {data && <PageContent data={data} />}
-  {faq && <FaqContent title={faq.title} intro={faq.intro} items={faq.items} />}
+  {faq && <FaqContent intro={faq.intro} items={faq.items} />}
   {selfTest && (
     <SelfTestContent
       intro={selfTest.intro}

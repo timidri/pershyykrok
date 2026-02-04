@@ -8,16 +8,14 @@ interface FaqItem {
 }
 
 interface Props {
-  title?: string;
   intro?: BlockContent | null;
   items?: FaqItem[] | null;
 }
 
-const { title, intro, items } = Astro.props;
+const { intro, items } = Astro.props;
 ---
 
 <div class="max-w-3xl mx-auto px-8 py-16 space-y-10">
-  {title && <h1 class="text-3xl font-semibold">{title}</h1>}
   {intro && <PortableText value={intro} />}
 
   {items && items.length > 0 && (
