@@ -26,14 +26,14 @@ const lines = footerText ? footerText.trim().split(/\r?\n/).filter(Boolean) : []
           {contact.address && <p>{contact.address}</p>}
           {contact.phone && (
             <p>
-              <a href={`tel:${contact.phone}`} class="text-[#1371AF] hover:underline underline-offset-2 font-medium">
+              <a href={`tel:${contact.phone}`} class="text-[#0B4A78] hover:underline underline-offset-2 font-medium">
                 {contact.phone}
               </a>
             </p>
           )}
           {contact.website && (
             <p>
-              <a href={contact.website.startsWith('http') ? contact.website : `https://${contact.website}`} target="_blank" rel="noopener noreferrer" class="text-[#1371AF] hover:underline underline-offset-2 font-medium">
+              <a href={contact.website.startsWith('http') ? contact.website : `https://${contact.website}`} target="_blank" rel="noopener noreferrer" class="text-[#0B4A78] hover:underline underline-offset-2 font-medium">
                 {contact.website.replace(/^https?:\/\//, '')}
               </a>
             </p>

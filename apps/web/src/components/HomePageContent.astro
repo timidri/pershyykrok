@@ -39,7 +39,7 @@ const mapEmbedUrl =
   {data.meetingSection && (
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 items-start">
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{data.meetingSection.sectionTitle}</h3>
+        <h2 class="text-lg font-semibold">{data.meetingSection.sectionTitle}</h2>
 
         <div class="flex gap-2">
           <span class="font-semibold shrink-0">{t.when}:</span>
@@ -58,7 +58,7 @@ const mapEmbedUrl =
 
         <div class="flex gap-2">
           <span class="font-semibold shrink-0">{t.phone}:</span>
-          <a href={contact?.phone ? `tel:${contact.phone}` : '#'} class="text-[#1371AF] hover:underline">
+          <a href={contact?.phone ? `tel:${contact.phone}` : '#'} class="text-[#0B4A78] hover:underline">
             {contact?.phone ?? ''}
           </a>
         </div>
@@ -78,13 +78,30 @@ const mapEmbedUrl =
 
       <div class="min-h-[300px] rounded overflow-hidden bg-gray-100">
         {mapEmbedUrl ? (
-          <iframe
-            title="Map"
-            src={mapEmbedUrl}
-            class="w-full h-[300px] border-0"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          />
+          <div
+            class="w-full h-[300px] flex flex-col items-center justify-center gap-3 text-center px-6"
+            data-map-container
+            data-map-src={mapEmbedUrl}
+          >
+            <span class="text-gray-600 text-sm">Карта загрузится по запросу</span>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center px-4 py-2 text-white rounded hover:opacity-90 transition-opacity"
+              style="background-color: #1371AF;"
+              data-map-load
+            >
+              Показать карту
+            </button>
+            <noscript>
+              <iframe
+                title="Map"
+                src={mapEmbedUrl}
+                class="w-full h-[300px] border-0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+            </noscript>
+          </div>
         ) : (
           <div class="w-full h-[300px] flex items-center justify-center">
             <span class="text-gray-500 text-sm">
@@ -96,3 +113,22 @@ const mapEmbedUrl =
     </div>
   )}
 </div>
+
+<script type="module" is:inline>
+  const container = document.querySelector('[data-map-container]');
+  if (container) {
+    const button = container.querySelector('[data-map-load]');
+    const src = container.getAttribute('data-map-src');
+    const load = () => {
+      if (!src) return;
+      const iframe = document.createElement('iframe');
+      iframe.title = 'Map';
+      iframe.src = src;
+      iframe.className = 'w-full h-[300px] border-0';
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      container.replaceWith(iframe);
+    };
+    if (button) button.addEventListener('click', load);
+  }
+</script>
