@@ -25,7 +25,13 @@ export default defineConfig({
     types: schemaTypes,
   },
   document: {
-    actions: (prev) => [...prev, previewAction, deployAction],
+    actions: (prev, context) => {
+      const type = context?.schemaType
+      if (type === 'faq' || type === 'selfTest') {
+        return prev.filter((action) => action.action !== 'duplicate')
+      }
+      return [...prev, previewAction, deployAction]
+    },
   },
   form: {
     components: {
@@ -50,9 +56,34 @@ export default defineConfig({
               ),
             S.documentTypeListItem('homePage').title('Home Page'),
             S.documentTypeListItem('page').title('Pages'),
+            S.listItem()
+              .title('FAQ')
+              .child(
+                S.documentList()
+                  .title('FAQ')
+                  .filter('_type == \"faq\"')
+                  .menuItems([])
+              ),
+            S.listItem()
+              .title('Self-Assessment')
+              .child(
+                S.documentList()
+                  .title('Self-Assessment')
+                  .filter('_type == \"selfTest\"')
+                  .menuItems([])
+              ),
           ]),
+      newDocumentOptions: (prev, { creationContext }) => {
+        if (creationContext.type === 'global') {
+          return prev.filter((item) => item.schemaType !== 'faq' && item.schemaType !== 'selfTest')
+        }
+        return prev
+      },
       defaultDocumentNode: (S, { schemaType }) =>
-        schemaType === 'homePage' || schemaType === 'page'
+        schemaType === 'homePage' ||
+        schemaType === 'page' ||
+        schemaType === 'faq' ||
+        schemaType === 'selfTest'
           ? S.document().views([S.view.form(), S.view.component(PreviewPane).title('Preview')])
           : S.document(),
     }),
@@ -62,7 +93,7 @@ export default defineConfig({
         { id: 'ua', title: 'Ukrainian' },
         { id: 'ru', title: 'Russian' }
       ],
-      schemaTypes: ['homePage', 'page'], 
+      schemaTypes: ['homePage', 'page', 'faq', 'selfTest'], 
       languageField: 'language'
     })
   ],})

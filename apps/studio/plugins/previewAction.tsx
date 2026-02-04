@@ -5,7 +5,7 @@ export const previewAction: DocumentActionComponent = (props: DocumentActionProp
   const { draft, published } = props;
   const doc = (draft || published) as { _type?: string; _id?: string; language?: string; slug?: { current?: string } } | undefined;
   const docType = doc?._type;
-  const isSupportedType = docType === 'homePage' || docType === 'page';
+  const isSupportedType = docType === 'homePage' || docType === 'page' || docType === 'faq' || docType === 'selfTest';
 
   const missingEnv = getMissingPreviewEnv();
 
@@ -22,7 +22,7 @@ export const previewAction: DocumentActionComponent = (props: DocumentActionProp
       : 'Open preview',
     title: disabled
       ? !isSupportedType
-        ? 'Preview is only available for Home Page and Page documents'
+        ? 'Preview is only available for Home Page, FAQ, Self-Assessment, and Page documents'
         : missingEnvMessage ||
           'Preview requires a locale and (for pages) a slug, plus SANITY_STUDIO_PREVIEW_SECRET'
       : 'Open draft preview in a new tab',

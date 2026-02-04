@@ -17,7 +17,9 @@ const otherPath = currentPath.replace(`/${locale}`, `/${otherLocale}`) || `/${ot
 function hrefForLink(link: { _type: string; slug: string | null } | null, locale: string): string {
   if (!link) return '#';
   if (link._type === 'homePage') return `/${locale}/`;
-  if (link._type === 'page' && link.slug) return `/${locale}/${link.slug}`;
+  if ((link._type === 'page' || link._type === 'faq' || link._type === 'selfTest') && link.slug) {
+    return `/${locale}/${link.slug}`;
+  }
   return '#';
 }
 ---

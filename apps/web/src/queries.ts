@@ -41,8 +41,49 @@ export const pageBySlugQuery = groq`*[_type == "page" && language == $locale && 
   slug
 }`;
 
+/** FAQ by locale and slug. */
+export const faqBySlugQuery = groq`*[_type == "faq" && language == $locale && slug.current == $slug][0]{
+  title,
+  intro,
+  items[]{
+    question,
+    answer
+  },
+  slug
+}`;
+
+/** Self-test by locale and slug. */
+export const selfTestBySlugQuery = groq`*[_type == "selfTest" && language == $locale && slug.current == $slug][0]{
+  title,
+  intro,
+  questions[]{
+    text
+  },
+  resultCopy,
+  slug
+}`;
+
+/** Preview document by ID (used to disambiguate slug collisions in preview). */
+export const previewDocByIdQuery = groq`*[_id == $id][0]{
+  _type,
+  title,
+  body,
+  intro,
+  items[]{
+    question,
+    answer
+  },
+  questions[]{
+    text
+  },
+  resultCopy,
+  slug,
+  language
+}`;
+
 /** All page slugs per locale (for static path generation). */
-export const allPageSlugsQuery = groq`*[_type == "page" && defined(slug.current)]{
+export const allPageSlugsQuery = groq`*[_type in ["page","faq","selfTest"] && defined(slug.current)]{
+  _type,
   "locale": language,
   "slug": slug.current
 }`;

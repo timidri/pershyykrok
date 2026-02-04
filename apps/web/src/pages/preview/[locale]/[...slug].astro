@@ -1,7 +1,15 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PageContent from '../../../components/PageContent.astro';
-import { fetchPageBySlugData } from '../../../lib/content';
+import FaqContent from '../../../components/FaqContent.astro';
+import SelfTestContent from '../../../components/SelfTestContent.astro';
+import {
+  fetchFaqBySlugData,
+  fetchPageBySlugData,
+  fetchPreviewDocById,
+  fetchSiteSettings,
+  fetchSelfTestBySlugData,
+} from '../../../lib/content';
 import { assertLocaleOrRedirect } from '../../../lib/locale';
 import { requirePreview } from '../../../lib/preview';
 
@@ -15,16 +23,50 @@ requirePreview(Astro);
 const slugStr = slug ?? '';
 if (!slugStr) return Astro.redirect(`/${localeValue}`);
 
-const data = await fetchPageBySlugData({ locale: localeValue, slug: slugStr, preview: true });
+const id = Astro.url.searchParams.get('id');
+const previewDoc = id ? await fetchPreviewDocById({ id, preview: true }) : null;
 
-if (!data) return Astro.redirect('/404');
+let data: Awaited<ReturnType<typeof fetchPageBySlugData>> | null = null;
+let faq: Awaited<ReturnType<typeof fetchFaqBySlugData>> | null = null;
+let selfTest: Awaited<ReturnType<typeof fetchSelfTestBySlugData>> | null = null;
+
+if (previewDoc?._type === 'page') {
+  data = previewDoc as Awaited<ReturnType<typeof fetchPageBySlugData>>;
+} else if (previewDoc?._type === 'faq') {
+  faq = previewDoc as Awaited<ReturnType<typeof fetchFaqBySlugData>>;
+} else if (previewDoc?._type === 'selfTest') {
+  selfTest = previewDoc as Awaited<ReturnType<typeof fetchSelfTestBySlugData>>;
+}
+
+if (!data && !faq && !selfTest) {
+  data = await fetchPageBySlugData({ locale: localeValue, slug: slugStr, preview: true });
+}
+if (!data && !faq && !selfTest) {
+  faq = await fetchFaqBySlugData({ locale: localeValue, slug: slugStr, preview: true });
+}
+if (!data && !faq && !selfTest) {
+  selfTest = await fetchSelfTestBySlugData({ locale: localeValue, slug: slugStr, preview: true });
+}
+const siteSettings = selfTest ? await fetchSiteSettings({ preview: true }) : null;
+
+if (!data && !faq && !selfTest) return Astro.redirect('/404');
 ---
 
 <BaseLayout
-  title={data.title ?? 'Page'}
+  title={(data?.title ?? faq?.title ?? selfTest?.title) ?? 'Page'}
   locale={localeValue}
-  currentPath={`/${localeValue}/${slugStr}`}
+  currentPath={`/${localeValue}/${previewDoc?.slug?.current ?? slugStr}`}
   isPreview={true}
 >
-  <PageContent data={data} />
+  {data && <PageContent data={data} />}
+  {faq && <FaqContent title={faq.title} intro={faq.intro} items={faq.items} />}
+  {selfTest && (
+    <SelfTestContent
+      intro={selfTest.intro}
+      questions={selfTest.questions}
+      resultCopy={selfTest.resultCopy}
+      contact={siteSettings?.contact ?? null}
+      locale={localeValue}
+    />
+  )}
 </BaseLayout>

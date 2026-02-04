@@ -35,16 +35,16 @@ todos:
 >>>>>>> 8603ab7db05a695c266d1756cd1af63b26983cb8
   - id: faq-page
     content: Add a FAQ page (schema, routing, Studio menu)
-    status: pending
+    status: completed
   - id: self-test-page
     content: Add a self-test page (schema, routing, Studio menu)
-    status: pending
+    status: completed
   - id: preview-studio-vercel
     content: Add a preview feature (Studio -> Vercel) so editors can open the site with draft content
     status: completed
   - id: deploy-studio-vercel
     content: Add a deploy feature (Studio -> Vercel) to trigger or link to Vercel deploy from Studio
-    status: pending
+    status: completed
 isProject: false
 ---
 

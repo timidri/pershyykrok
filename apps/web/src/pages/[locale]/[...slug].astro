@@ -1,8 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageContent from '../../components/PageContent.astro';
+import FaqContent from '../../components/FaqContent.astro';
+import SelfTestContent from '../../components/SelfTestContent.astro';
 import { allPageSlugsQuery } from '../../queries';
-import { fetchPageBySlugData } from '../../lib/content';
+import {
+  fetchFaqBySlugData,
+  fetchPageBySlugData,
+  fetchSelfTestBySlugData,
+  fetchSiteSettings,
+} from '../../lib/content';
 import { client } from '../../lib/sanity';
 import { assertLocaleOrRedirect, isLocale } from '../../lib/locale';
 
@@ -26,14 +33,27 @@ const slugStr = slug ?? '';
 if (!slugStr) return Astro.redirect(`/${localeValue}`);
 
 const data = await fetchPageBySlugData({ locale: localeValue, slug: slugStr });
+const faq = data ? null : await fetchFaqBySlugData({ locale: localeValue, slug: slugStr });
+const selfTest = data || faq ? null : await fetchSelfTestBySlugData({ locale: localeValue, slug: slugStr });
+const siteSettings = selfTest ? await fetchSiteSettings({ preview: false }) : null;
 
-if (!data) return Astro.redirect('/404');
+if (!data && !faq && !selfTest) return Astro.redirect('/404');
 ---
 
 <BaseLayout
-  title={data.title ?? 'Page'}
+  title={(data?.title ?? faq?.title ?? selfTest?.title) ?? 'Page'}
   locale={localeValue}
   currentPath={`/${localeValue}/${slugStr}`}
 >
-  <PageContent data={data} />
+  {data && <PageContent data={data} />}
+  {faq && <FaqContent title={faq.title} intro={faq.intro} items={faq.items} />}
+  {selfTest && (
+    <SelfTestContent
+      intro={selfTest.intro}
+      questions={selfTest.questions}
+      resultCopy={selfTest.resultCopy}
+      contact={siteSettings?.contact ?? null}
+      locale={localeValue}
+    />
+  )}
 </BaseLayout>

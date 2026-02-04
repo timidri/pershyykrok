@@ -47,7 +47,7 @@ export default defineType({
           },
           fields: [
             { name: 'label', type: 'string', title: 'Label' },
-            { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }] }
+            { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }, { type: 'faq' }, { type: 'selfTest' }] }
           ]
         }
       ]
@@ -78,7 +78,7 @@ export default defineType({
           },
           fields: [
             { name: 'label', type: 'string', title: 'Label' },
-            { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }] }
+            { name: 'link', type: 'reference', to: [{ type: 'page'}, { type: 'homePage' }, { type: 'faq' }, { type: 'selfTest' }] }
           ]
         }
       ]

@@ -17,7 +17,7 @@ Copy of the development plan todos so collaborators can see what is done and wha
 - [x] Reduce duplication between preview routes and main pages in Astro
 
 ## To do
-- [ ] Add a FAQ page (schema, routing, Studio menu)
-- [ ] Add a self-test page (schema, routing, Studio menu)
+- [x] Add a FAQ page (schema, routing, Studio menu)
+- [x] Add a self-test page (schema, routing, Studio menu)
 - [ ] Define a staging workflow with a stable preview URL (staging branch, Vercel alias, Studio preview URL pointing to staging)
-- [ ] Add a deploy feature (Studio → Vercel) to trigger or link to Vercel deploy from Studio
+- [x] Add a deploy feature (Studio → Vercel) to trigger or link to Vercel deploy from Studio

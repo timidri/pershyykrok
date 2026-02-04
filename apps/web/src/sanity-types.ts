@@ -34,6 +34,20 @@ export type HomePageReference = {
   [internalGroqTypeReferenceTo]?: "homePage";
 };
 
+export type FaqReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "faq";
+};
+
+export type SelfTestReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "selfTest";
+};
+
 export type SiteSettings = {
   _id: string;
   _type: "siteSettings";
@@ -49,12 +63,12 @@ export type SiteSettings = {
   };
   mainMenuRu?: Array<{
     label?: string;
-    link?: PageReference | HomePageReference;
+    link?: PageReference | HomePageReference | FaqReference | SelfTestReference;
     _key: string;
   }>;
   mainMenuUa?: Array<{
     label?: string;
-    link?: PageReference | HomePageReference;
+    link?: PageReference | HomePageReference | FaqReference | SelfTestReference;
     _key: string;
   }>;
   footerText?: {
@@ -161,7 +175,47 @@ export type InternationalizedArrayReference = Array<
 
 export type InternationalizedArrayReferenceValue = {
   _type: "internationalizedArrayReferenceValue";
-  value?: HomePageReference | PageReference;
+  value?: HomePageReference | PageReference | FaqReference | SelfTestReference;
+};
+
+export type SelfTest = {
+  _id: string;
+  _type: "selfTest";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  title?: string;
+  slug: Slug;
+  intro?: BlockContent;
+  questions?: Array<{
+    text?: string;
+    _key: string;
+  }>;
+  resultCopy?: BlockContent;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
+export type Faq = {
+  _id: string;
+  _type: "faq";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  title?: string;
+  slug: Slug;
+  intro?: BlockContent;
+  items?: Array<{
+    question?: string;
+    answer?: BlockContent;
+    _key: string;
+  }>;
 };
 
 export type Page = {
@@ -174,12 +228,6 @@ export type Page = {
   title?: string;
   slug: Slug;
   body?: BlockContent;
-};
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
 };
 
 export type HomePage = {
@@ -292,6 +340,8 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | PageReference
   | HomePageReference
+  | FaqReference
+  | SelfTestReference
   | SiteSettings
   | SanityImageCrop
   | SanityImageHotspot
@@ -300,8 +350,10 @@ export type AllSanitySchemaTypes =
   | TranslationMetadata
   | InternationalizedArrayReference
   | InternationalizedArrayReferenceValue
-  | Page
+  | SelfTest
   | Slug
+  | Faq
+  | Page
   | HomePage
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -343,11 +395,19 @@ export type SiteSettingsQueryResult =
         label: string | null;
         link:
           | {
+              _type: "faq";
+              slug: string;
+            }
+          | {
               _type: "homePage";
               slug: null;
             }
           | {
               _type: "page";
+              slug: string;
+            }
+          | {
+              _type: "selfTest";
               slug: string;
             }
           | null;
@@ -356,11 +416,19 @@ export type SiteSettingsQueryResult =
         label: string | null;
         link:
           | {
+              _type: "faq";
+              slug: string;
+            }
+          | {
               _type: "homePage";
               slug: null;
             }
           | {
               _type: "page";
+              slug: string;
+            }
+          | {
+              _type: "selfTest";
               slug: string;
             }
           | null;
@@ -424,12 +492,150 @@ export type PageBySlugQueryResult = {
 } | null;
 
 // Source: ../web/src/queries.ts
+// Variable: faqBySlugQuery
+// Query: *[_type == "faq" && language == $locale && slug.current == $slug][0]{  title,  intro,  items[]{    question,    answer  },  slug}
+export type FaqBySlugQueryResult = {
+  title: string | null;
+  intro: BlockContent | null;
+  items: Array<{
+    question: string | null;
+    answer: BlockContent | null;
+  }> | null;
+  slug: Slug;
+} | null;
+
+// Source: ../web/src/queries.ts
+// Variable: selfTestBySlugQuery
+// Query: *[_type == "selfTest" && language == $locale && slug.current == $slug][0]{  title,  intro,  questions[]{    text  },  resultCopy,  slug}
+export type SelfTestBySlugQueryResult = {
+  title: string | null;
+  intro: BlockContent | null;
+  questions: Array<{
+    text: string | null;
+  }> | null;
+  resultCopy: BlockContent | null;
+  slug: Slug;
+} | null;
+
+// Source: ../web/src/queries.ts
+// Variable: previewDocByIdQuery
+// Query: *[_id == $id][0]{  _type,  title,  body,  intro,  items[]{    question,    answer  },  questions[]{    text  },  resultCopy,  slug,  language}
+export type PreviewDocByIdQueryResult =
+  | {
+      _type: "faq";
+      title: string | null;
+      body: null;
+      intro: BlockContent | null;
+      items: Array<{
+        question: string | null;
+        answer: BlockContent | null;
+      }> | null;
+      questions: null;
+      resultCopy: null;
+      slug: Slug;
+      language: string | null;
+    }
+  | {
+      _type: "homePage";
+      title: string | null;
+      body: null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: null;
+      language: string | null;
+    }
+  | {
+      _type: "page";
+      title: string | null;
+      body: BlockContent | null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: Slug;
+      language: string | null;
+    }
+  | {
+      _type: "sanity.fileAsset";
+      title: string | null;
+      body: null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: null;
+      language: null;
+    }
+  | {
+      _type: "sanity.imageAsset";
+      title: string | null;
+      body: null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: null;
+      language: null;
+    }
+  | {
+      _type: "selfTest";
+      title: string | null;
+      body: null;
+      intro: BlockContent | null;
+      items: null;
+      questions: Array<{
+        text: string | null;
+      }> | null;
+      resultCopy: BlockContent | null;
+      slug: Slug;
+      language: string | null;
+    }
+  | {
+      _type: "siteSettings";
+      title: null;
+      body: null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: null;
+      language: null;
+    }
+  | {
+      _type: "translation.metadata";
+      title: null;
+      body: null;
+      intro: null;
+      items: null;
+      questions: null;
+      resultCopy: null;
+      slug: null;
+      language: null;
+    }
+  | null;
+
+// Source: ../web/src/queries.ts
 // Variable: allPageSlugsQuery
-// Query: *[_type == "page" && defined(slug.current)]{  "locale": language,  "slug": slug.current}
-export type AllPageSlugsQueryResult = Array<{
-  locale: string | null;
-  slug: string;
-}>;
+// Query: *[_type in ["page","faq","selfTest"] && defined(slug.current)]{  _type,  "locale": language,  "slug": slug.current}
+export type AllPageSlugsQueryResult = Array<
+  | {
+      _type: "faq";
+      locale: string | null;
+      slug: string;
+    }
+  | {
+      _type: "page";
+      locale: string | null;
+      slug: string;
+    }
+  | {
+      _type: "selfTest";
+      locale: string | null;
+      slug: string;
+    }
+>;
 
 // Query TypeMap
 import "@sanity/client";
@@ -438,6 +644,9 @@ declare module "@sanity/client" {
     '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact),\n  seo{\n    title,\n    description,\n    ogImage,\n    ogImageAlt,\n    canonicalBaseUrl\n  }\n}': SiteSettingsQueryResult;
     '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection{\n    sectionTitle,\n    time,\n    languages\n  }\n}': HomePageQueryResult;
     '*[_type == "page" && language == $locale && slug.current == $slug][0]{\n  title,\n  body,\n  slug\n}': PageBySlugQueryResult;
-    '*[_type == "page" && defined(slug.current)]{\n  "locale": language,\n  "slug": slug.current\n}': AllPageSlugsQueryResult;
+    '*[_type == "faq" && language == $locale && slug.current == $slug][0]{\n  title,\n  intro,\n  items[]{\n    question,\n    answer\n  },\n  slug\n}': FaqBySlugQueryResult;
+    '*[_type == "selfTest" && language == $locale && slug.current == $slug][0]{\n  title,\n  intro,\n  questions[]{\n    text\n  },\n  resultCopy,\n  slug\n}': SelfTestBySlugQueryResult;
+    "*[_id == $id][0]{\n  _type,\n  title,\n  body,\n  intro,\n  items[]{\n    question,\n    answer\n  },\n  questions[]{\n    text\n  },\n  resultCopy,\n  slug,\n  language\n}": PreviewDocByIdQueryResult;
+    '*[_type in ["page","faq","selfTest"] && defined(slug.current)]{\n  _type,\n  "locale": language,\n  "slug": slug.current\n}': AllPageSlugsQueryResult;
   }
 }
