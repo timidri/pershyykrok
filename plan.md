@@ -28,11 +28,7 @@ todos:
     status: completed
   - id: seo-config
     content: Add SEO configuration to siteSettings and ensure all needed information is there for optimal SEO; use that information where needed in the website
-<<<<<<< HEAD
     status: completed
-=======
-    status: pending
->>>>>>> 8603ab7db05a695c266d1756cd1af63b26983cb8
   - id: faq-page
     content: Add a FAQ page (schema, routing, Studio menu)
     status: completed
@@ -45,6 +41,9 @@ todos:
   - id: deploy-studio-vercel
     content: Add a deploy feature (Studio -> Vercel) to trigger or link to Vercel deploy from Studio
     status: completed
+  - id: missing-translations
+    content: Add missing translations
+    status: pending
 isProject: false
 ---
 
