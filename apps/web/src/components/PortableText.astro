@@ -5,12 +5,6 @@ import PortableTextImage from './portable-text/PortableTextImage.astro';
 import PortableTextMarkLeft from './portable-text/PortableTextMarkLeft.astro';
 import PortableTextMarkCenter from './portable-text/PortableTextMarkCenter.astro';
 import PortableTextMarkRight from './portable-text/PortableTextMarkRight.astro';
-import PortableTextH1 from './portable-text/PortableTextH1.astro';
-import PortableTextH2 from './portable-text/PortableTextH2.astro';
-import PortableTextH3 from './portable-text/PortableTextH3.astro';
-import PortableTextH4 from './portable-text/PortableTextH4.astro';
-import PortableTextH5 from './portable-text/PortableTextH5.astro';
-import PortableTextH6 from './portable-text/PortableTextH6.astro';
 
 interface Props {
   value: BlockContent;
@@ -19,14 +13,6 @@ interface Props {
 const components = {
   type: {
     image: PortableTextImage,
-  },
-  block: {
-    h1: PortableTextH1,
-    h2: PortableTextH2,
-    h3: PortableTextH3,
-    h4: PortableTextH4,
-    h5: PortableTextH5,
-    h6: PortableTextH6,
   },
   mark: {
     left: PortableTextMarkLeft,
