@@ -113,3 +113,4 @@ Optional: if your Sanity project needs env vars (e.g. for CORS or a plugin), add
 
 - **Website**: Use the Vercel URL (e.g. `pershyykrok-web.vercel.app`).
 - **Studio**: Use the Studio project URL (e.g. `pershyykrok-studio.vercel.app`). In [sanity.io/manage](https://sanity.io/manage), add this URL to your project’s **API → CORS origins** (and **Hosts** if you use it) so the Studio can talk to Sanity.
+
