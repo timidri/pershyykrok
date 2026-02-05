@@ -1,4 +1,27 @@
-import { defineType } from 'sanity'
+import { defineType, type SlugIsUniqueFn } from 'sanity'
+
+const isUniqueSlugByLang: SlugIsUniqueFn = async (slug, context) => {
+  const { document, getClient } = context
+  const currentId = document?._id?.replace(/^drafts\./, '')
+  const draftId = currentId ? `drafts.${currentId}` : undefined
+  const language = (document as { language?: string } | undefined)?.language
+
+  if (!slug?.current || !language) return true
+
+  const client = getClient({ apiVersion: '2023-10-16' })
+  const query =
+    '*[_type == $type && slug.current == $slug && language == $language && !(_id in [$id, $draftId])][0]._id'
+  const params = {
+    type: document?._type,
+    slug: slug.current,
+    language,
+    id: currentId,
+    draftId,
+  }
+
+  const existingId = await client.fetch<string | null>(query, params)
+  return !existingId
+}
 
 export default defineType({
   name: 'page',
@@ -22,16 +45,16 @@ export default defineType({
       hidden: true, // Optional: hides it from the UI so it doesn't clutter the form
     },
     { name: 'title', type: 'string', title: 'Page Title' },
-    { 
-      name: 'slug', 
-      type: 'slug', 
-      options: { source: 'title' },
-      validation: Rule => Rule.required()
+    {
+      name: 'slug',
+      type: 'slug',
+      options: { source: 'title', isUnique: isUniqueSlugByLang },
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'body',
       title: 'Content',
       type: 'blockContent',
-    }
-  ]
+    },
+  ],
 })
