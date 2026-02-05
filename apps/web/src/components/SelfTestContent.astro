@@ -105,6 +105,7 @@ const callUsLabel = locale === 'ua' ? 'Зателефонуйте нам' : 'П�
     const noEl = container.querySelector('[data-self-test-no]');
     const totalQuestions = container.querySelectorAll('[data-self-test-question]').length;
     const answers = new Array(totalQuestions).fill(null);
+    const activeColor = '#1371AF';
 
     const updateCounts = () => {
       let yesTotal = 0;
@@ -131,6 +132,9 @@ const callUsLabel = locale === 'ua' ? 'Зателефонуйте нам' : 'П�
         button.classList.toggle('border-[#1371AF]', isActive);
         button.classList.toggle('text-white', isActive);
         button.classList.toggle('text-gray-700', !isActive);
+        button.style.backgroundColor = isActive ? activeColor : '';
+        button.style.borderColor = isActive ? activeColor : '';
+        button.style.color = isActive ? '#ffffff' : '';
       });
     };
 
