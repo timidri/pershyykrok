@@ -23,3 +23,4 @@ Copy of the development plan todos so collaborators can see what is done and wha
 - [x] Add a deploy feature (Studio → Vercel) to trigger or link to Vercel deploy from Studio
 - [ ] Add missing translations
 - [ ] Evaluate performance and SEO
+- [ ] Refactor slug uniqueness helper into shared module once Studio hot-reload is stable
