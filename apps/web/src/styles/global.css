@@ -18,6 +18,16 @@
   font-display: swap;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: scroll;
+  }
+}
+
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-normal;
