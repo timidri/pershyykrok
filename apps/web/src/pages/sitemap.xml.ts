@@ -11,15 +11,33 @@ function toUrl(base: string, path: string) {
   return `${normalizedBase}${normalizedPath}`;
 }
 
+function normalizeCanonicalHost(urlOrOrigin: string) {
+  try {
+    const url = new URL(urlOrOrigin);
+    if (url.hostname === 'pershyykrok.nl') {
+      url.hostname = 'www.pershyykrok.nl';
+    }
+    return url.origin;
+  } catch {
+    return urlOrOrigin.replace(/\/$/, '');
+  }
+}
+
+function getCanonicalBase(request: Request, configuredBaseUrl?: string) {
+  if (configuredBaseUrl) return normalizeCanonicalHost(configuredBaseUrl);
+
+  const url = new URL(request.url);
+  return normalizeCanonicalHost(url.origin);
+}
+
 export async function GET({ request }: { request: Request }) {
-  const origin = new URL(request.url).origin;
   const client = getClient({ preview: false });
   const [siteSettings, slugs] = await Promise.all([
     client.fetch<{ seo?: { canonicalBaseUrl?: string } } | null>(siteSettingsQuery),
     client.fetch<SlugRow[]>(allPageSlugsQuery),
   ]);
 
-  const base = siteSettings?.seo?.canonicalBaseUrl ?? origin;
+  const base = getCanonicalBase(request, siteSettings?.seo?.canonicalBaseUrl);
   const urls = new Set<string>();
 
   urls.add(toUrl(base, '/ua/'));
