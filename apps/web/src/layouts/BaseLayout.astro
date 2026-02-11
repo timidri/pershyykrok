@@ -33,7 +33,20 @@ const metaTitle = isHome
   : title || defaultTitle;
 const metaDescription = seo?.description?.[locale] ?? undefined;
 
-const canonicalBase = seo?.canonicalBaseUrl?.replace(/\/$/, '');
+function normalizeCanonicalBaseUrl(value?: string) {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    if (url.hostname === 'pershyykrok.nl') {
+      url.hostname = 'www.pershyykrok.nl';
+    }
+    return url.origin.replace(/\/$/, '');
+  } catch {
+    return value.replace(/\/$/, '');
+  }
+}
+
+const canonicalBase = normalizeCanonicalBaseUrl(seo?.canonicalBaseUrl);
 const canonicalUrl = canonicalBase ? `${canonicalBase}${normalizedPath}` : undefined;
 
 const ogImageUrl = seo?.ogImage
