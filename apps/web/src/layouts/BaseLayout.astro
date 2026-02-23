@@ -49,6 +49,27 @@ function normalizeCanonicalBaseUrl(value?: string) {
 const canonicalBase = normalizeCanonicalBaseUrl(seo?.canonicalBaseUrl);
 const canonicalUrl = canonicalBase ? `${canonicalBase}${normalizedPath}` : undefined;
 
+function buildAlternatePath(path: string, targetLocale: 'ru' | 'ua') {
+  if (!path.startsWith('/')) return undefined;
+  const segments = path.split('/');
+  if (segments.length < 2) return undefined;
+  const currentLocale = segments[1];
+  if (currentLocale !== 'ru' && currentLocale !== 'ua') return undefined;
+  segments[1] = targetLocale;
+  return segments.join('/');
+}
+
+const uaAlternatePath = buildAlternatePath(normalizedPath, 'ua');
+const ruAlternatePath = buildAlternatePath(normalizedPath, 'ru');
+const xDefaultPath = uaAlternatePath;
+
+const uaAlternateUrl =
+  !isPreview && canonicalBase && uaAlternatePath ? `${canonicalBase}${uaAlternatePath}` : undefined;
+const ruAlternateUrl =
+  !isPreview && canonicalBase && ruAlternatePath ? `${canonicalBase}${ruAlternatePath}` : undefined;
+const xDefaultUrl =
+  !isPreview && canonicalBase && xDefaultPath ? `${canonicalBase}${xDefaultPath}` : undefined;
+
 const ogImageUrl = seo?.ogImage
   ? urlForImage(seo.ogImage).width(1200).height(630).fit('crop').url()
   : undefined;
@@ -68,6 +89,9 @@ const ogImageAlt = seo?.ogImageAlt?.[locale] ?? undefined;
     {isPreview && <meta name="robots" content="noindex,nofollow" />}
     {metaDescription && <meta name="description" content={metaDescription} />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {uaAlternateUrl && <link rel="alternate" hreflang="uk" href={uaAlternateUrl} />}
+    {ruAlternateUrl && <link rel="alternate" hreflang="ru" href={ruAlternateUrl} />}
+    {xDefaultUrl && <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />}
     <meta property="og:type" content="website" />
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     {metaTitle && <meta property="og:title" content={metaTitle} />}
