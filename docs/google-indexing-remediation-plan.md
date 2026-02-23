@@ -43,10 +43,10 @@ Make Google consistently select `https://www.pershyykrok.nl` as canonical host a
 
 ## Rollout checklist
 
-- [ ] Platform redirect configured as permanent from bare -> www.
-- [ ] `siteSettings.seo.canonicalBaseUrl` confirmed as `https://www.pershyykrok.nl`.
+- [x] Platform redirect configured as permanent from bare -> www (`apps/web/vercel.json`).
+- [x] `siteSettings.seo.canonicalBaseUrl` defaults to `https://www.pershyykrok.nl` in Studio schema.
 - [ ] Sitemap/robots inspected in production and aligned to `www`.
-- [ ] Internal hardcoded bare-domain links replaced.
+- [x] Internal hardcoded bare-domain links replaced (repo audit found no bare-domain app links).
 - [ ] Search Console re-submission and monitoring started.
 
 ## Expected outcome
