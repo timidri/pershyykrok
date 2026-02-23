@@ -7,3 +7,8 @@ dist
 .env.local
 npm-debug.log*
 pnpm-debug.log*
+
+# Generated worker/playwright outputs
+/output/
+/skill_output/
+/skill_output/playwright-worker/
