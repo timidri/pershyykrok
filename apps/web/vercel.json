@@ -1,6 +1,17 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "pershyykrok.nl"
+        }
+      ],
+      "destination": "https://www.pershyykrok.nl/ua",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         {
