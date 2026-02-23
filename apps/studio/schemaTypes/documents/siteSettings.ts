@@ -158,7 +158,8 @@ export default defineType({
           name: 'canonicalBaseUrl',
           type: 'url',
           title: 'Canonical Base URL',
-          description: 'Example: https://example.org'
+          description: 'Example: https://www.pershyykrok.nl',
+          initialValue: 'https://www.pershyykrok.nl'
         }
       ]
     }
