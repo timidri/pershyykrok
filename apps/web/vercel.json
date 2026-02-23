@@ -5,6 +5,17 @@
       "has": [
         {
           "type": "host",
+          "value": "www.pershyykrok.nl"
+        }
+      ],
+      "destination": "/ua",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
           "value": "pershyykrok.nl"
         }
       ],
