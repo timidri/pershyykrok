@@ -37,7 +37,7 @@ const faq = data ? null : await fetchFaqBySlugData({ locale: localeValue, slug: 
 const selfTest = data || faq ? null : await fetchSelfTestBySlugData({ locale: localeValue, slug: slugStr });
 const siteSettings = selfTest ? await fetchSiteSettings({ preview: false }) : null;
 
-if (!data && !faq && !selfTest) return Astro.redirect('/404');
+if (!data && !faq && !selfTest) return Astro.rewrite('/404');
 ---
 
 <BaseLayout

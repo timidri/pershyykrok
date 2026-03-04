@@ -49,7 +49,7 @@ if (!data && !faq && !selfTest) {
 }
 const siteSettings = selfTest ? await fetchSiteSettings({ preview: true }) : null;
 
-if (!data && !faq && !selfTest) return Astro.redirect('/404');
+if (!data && !faq && !selfTest) return Astro.rewrite('/404');
 ---
 
 <BaseLayout
