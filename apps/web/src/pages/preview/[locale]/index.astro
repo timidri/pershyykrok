@@ -13,7 +13,7 @@ requirePreview(Astro);
 
 const { data, siteSettings } = await fetchHomePageData({ locale: localeValue, preview: true });
 
-if (!data) return Astro.redirect('/404');
+if (!data) return Astro.rewrite('/404');
 
 const contact = siteSettings?.contact ?? null;
 ---
