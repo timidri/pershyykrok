@@ -119,17 +119,21 @@ const ogImageAlt = seo?.ogImageAlt?.[locale] ?? undefined;
       href="/fonts/pt-serif/pt-serif-v19-cyrillic_cyrillic-ext_latin_latin-ext-700.woff2"
       crossorigin
     />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PNWJLT84S6"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        window.dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
+    {!isPreview && (
+      <>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PNWJLT84S6"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            window.dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
 
-      gtag('config', 'G-PNWJLT84S6');
-    </script>
+          gtag('config', 'G-PNWJLT84S6');
+        </script>
+      </>
+    )}
     <!-- Acumin Pro via Adobe Fonts: replace YOUR_ADOBE_KIT_ID with your kit ID from use.typekit.net -->
   </head>
   <body class="font-body text-body antialiased text-gray-900 flex flex-col min-h-screen">
