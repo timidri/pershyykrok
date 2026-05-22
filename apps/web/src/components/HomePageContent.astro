@@ -15,6 +15,63 @@ const t = {
   ru: { when: 'Когда', where: 'Где', languages: 'Языки', phone: 'Телефон', callUs: 'Позвоните нам' },
 }[locale];
 
+const resourceLinks = {
+  ua: {
+    title: 'Ресурси АА',
+    description: 'Перевірені сторінки, де можна знайти нашу групу, інші україномовні зустрічі та загальну інформацію про АА.',
+    action: 'Перейти',
+    items: [
+      {
+        label: 'Pershyy Krok в AA Netherlands',
+        description: 'Актуальна сторінка нашої групи в офіційному списку зустрічей AA Netherlands.',
+        href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
+      },
+      {
+        label: 'Україномовні групи за кордоном',
+        description: 'Список АА України з україномовними групами та контактами поза Україною.',
+        href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
+      },
+      {
+        label: 'A.A. Continental European Region',
+        description: 'Ресурси АА для англомовних груп у континентальній Європі.',
+        href: 'https://alcoholics-anonymous.eu/',
+      },
+      {
+        label: 'Alcoholics Anonymous',
+        description: 'Головний сайт Alcoholics Anonymous World Services з інформацією про програму АА.',
+        href: 'https://www.aa.org/',
+      },
+    ],
+  },
+  ru: {
+    title: 'Ресурсы АА',
+    description: 'Проверенные страницы, где можно найти нашу группу, другие украиноязычные встречи и общую информацию об АА.',
+    action: 'Перейти',
+    items: [
+      {
+        label: 'Pershyy Krok в AA Netherlands',
+        description: 'Актуальная страница нашей группы в официальном списке встреч AA Netherlands.',
+        href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
+      },
+      {
+        label: 'Украиноязычные группы за рубежом',
+        description: 'Список АА Украины с украиноязычными группами и контактами за пределами Украины.',
+        href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
+      },
+      {
+        label: 'A.A. Continental European Region',
+        description: 'Ресурсы АА для англоязычных групп в континентальной Европе.',
+        href: 'https://alcoholics-anonymous.eu/',
+      },
+      {
+        label: 'Alcoholics Anonymous',
+        description: 'Главный сайт Alcoholics Anonymous World Services с информацией о программе АА.',
+        href: 'https://www.aa.org/',
+      },
+    ],
+  },
+}[locale];
+
 const mapLocation = contact?.mapLocation ?? null;
 const hasMap = mapLocation && mapLocation.lat != null && mapLocation.lng != null;
 const mapBbox = hasMap
@@ -95,4 +152,28 @@ const mapEmbedUrl =
       </div>
     </div>
   )}
+
+  <section class="mt-12 border-t border-gray-200 pt-8" aria-labelledby="aa-resource-links-title">
+    <div class="max-w-3xl">
+      <h2 id="aa-resource-links-title" class="text-lg font-semibold">{resourceLinks.title}</h2>
+      <p class="mt-2 text-gray-700">{resourceLinks.description}</p>
+    </div>
+
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {resourceLinks.items.map((item) => (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block rounded-md border border-gray-200 bg-white p-4 transition-colors hover:border-[#1371AF] focus:outline-none focus:ring-2 focus:ring-[#1371AF] focus:ring-offset-2"
+        >
+          <span class="block font-semibold text-gray-950">{item.label}</span>
+          <span class="mt-2 block text-sm leading-6 text-gray-700">{item.description}</span>
+          <span class="mt-3 inline-flex text-sm font-semibold text-[#0B4A78] group-hover:underline">
+            {resourceLinks.action}
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
 </div>
