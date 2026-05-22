@@ -31,6 +31,16 @@ export const homePageQuery = groq`*[_type == "homePage" && language == $locale][
     sectionTitle,
     time,
     languages
+  },
+  resourceLinksSection{
+    sectionTitle,
+    description,
+    linkPrompt,
+    items[]{
+      label,
+      description,
+      href
+    }
   }
 }`;
 
