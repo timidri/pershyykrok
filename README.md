@@ -59,7 +59,7 @@ This repo includes a Studio action that opens a draft preview using a server-ren
 
 ### Studio env vars (apps/studio)
 
-- `SANITY_STUDIO_PREVIEW_URL`: Base URL of the website (e.g. `https://pershyykrok.nl`).
+- `SANITY_STUDIO_PREVIEW_URL`: Base URL of the website (e.g. `https://www.pershyykrok.nl`).
 - `SANITY_STUDIO_PREVIEW_SECRET`: Must match `SANITY_PREVIEW_SECRET`.
 - `SANITY_STUDIO_VERCEL_DEPLOY_HOOK`: Vercel Deploy Hook URL for manual deploys from Studio.
 
