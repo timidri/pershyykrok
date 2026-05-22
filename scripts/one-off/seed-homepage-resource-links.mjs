@@ -1,11 +1,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import {createRequire} from 'node:module'
+import {fileURLToPath} from 'node:url'
 
-const requireFromWeb = createRequire(new URL('../apps/web/package.json', import.meta.url))
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+const requireFromWeb = createRequire(new URL('../../apps/web/package.json', import.meta.url))
 const {createClient} = requireFromWeb('@sanity/client')
 
-const envPath = path.resolve(process.cwd(), '.env.local')
+const envPath = path.join(repoRoot, '.env.local')
 const env = {...process.env}
 
 if (fs.existsSync(envPath)) {
@@ -45,28 +47,24 @@ const resourceLinksByLanguage = {
     linkPrompt: 'Перейти',
     items: [
       {
-        _type: 'object',
         _key: 'aa-netherlands',
         label: 'Pershyy Krok в AA Netherlands',
         description: 'Актуальна сторінка нашої групи в офіційному списку зустрічей AA Netherlands.',
         href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
       },
       {
-        _type: 'object',
         _key: 'aa-ukraine-abroad',
         label: 'Україномовні групи за кордоном',
         description: 'Список АА України з україномовними групами та контактами поза Україною.',
         href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
       },
       {
-        _type: 'object',
         _key: 'aa-continental-europe',
         label: 'A.A. Continental European Region',
         description: 'Ресурси АА для англомовних груп у континентальній Європі.',
         href: 'https://alcoholics-anonymous.eu/',
       },
       {
-        _type: 'object',
         _key: 'aa-world-services',
         label: 'Alcoholics Anonymous',
         description: 'Головний сайт Alcoholics Anonymous World Services з інформацією про програму АА.',
@@ -81,28 +79,24 @@ const resourceLinksByLanguage = {
     linkPrompt: 'Перейти',
     items: [
       {
-        _type: 'object',
         _key: 'aa-netherlands',
         label: 'Pershyy Krok в AA Netherlands',
         description: 'Актуальная страница нашей группы в официальном списке встреч AA Netherlands.',
         href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
       },
       {
-        _type: 'object',
         _key: 'aa-ukraine-abroad',
         label: 'Украиноязычные группы за рубежом',
         description: 'Список АА Украины с украиноязычными группами и контактами за пределами Украины.',
         href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
       },
       {
-        _type: 'object',
         _key: 'aa-continental-europe',
         label: 'A.A. Continental European Region',
         description: 'Ресурсы АА для англоязычных групп в континентальной Европе.',
         href: 'https://alcoholics-anonymous.eu/',
       },
       {
-        _type: 'object',
         _key: 'aa-world-services',
         label: 'Alcoholics Anonymous',
         description: 'Главный сайт Alcoholics Anonymous World Services с информацией о программе АА.',
