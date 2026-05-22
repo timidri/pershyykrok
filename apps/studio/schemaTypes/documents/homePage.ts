@@ -45,6 +45,38 @@ export default defineType({
         { name: 'time', type: 'string', title: 'Time' },
         { name: 'languages', type: 'string', title: 'Languages' }
       ]
+    },
+    {
+      name: 'resourceLinksSection',
+      title: 'AA Resource Links',
+      type: 'object',
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        { name: 'sectionTitle', type: 'string', title: 'Section Title' },
+        { name: 'description', type: 'text', title: 'Description', rows: 3 },
+        { name: 'linkPrompt', type: 'string', title: 'Link CTA' },
+        {
+          name: 'items',
+          type: 'array',
+          title: 'Links',
+          of: [
+            {
+              type: 'object',
+              preview: {
+                select: {
+                  title: 'label',
+                  subtitle: 'href',
+                },
+              },
+              fields: [
+                { name: 'label', type: 'string', title: 'Label' },
+                { name: 'description', type: 'text', title: 'Description', rows: 2 },
+                { name: 'href', type: 'url', title: 'URL' },
+              ],
+            },
+          ],
+        },
+      ],
     }
   ]
 })

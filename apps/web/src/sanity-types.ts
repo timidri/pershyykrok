@@ -244,6 +244,17 @@ export type HomePage = {
     time?: string;
     languages?: string;
   };
+  resourceLinksSection?: {
+    sectionTitle?: string;
+    description?: string;
+    linkPrompt?: string;
+    items?: Array<{
+      label?: string;
+      description?: string;
+      href?: string;
+      _key: string;
+    }>;
+  };
 };
 
 export type SanityImagePaletteSwatch = {
@@ -470,7 +481,7 @@ export type SiteSettingsQueryResult =
 
 // Source: ../web/src/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && language == $locale][0]{  title,  introText,  language,  meetingSection{    sectionTitle,    time,    languages  }}
+// Query: *[_type == "homePage" && language == $locale][0]{  title,  introText,  language,  meetingSection{    sectionTitle,    time,    languages  },  resourceLinksSection{    sectionTitle,    description,    linkPrompt,    items[]{      label,      description,      href    }  }}
 export type HomePageQueryResult = {
   title: string | null;
   introText: BlockContent | null;
@@ -479,6 +490,16 @@ export type HomePageQueryResult = {
     sectionTitle: string | null;
     time: string | null;
     languages: string | null;
+  } | null;
+  resourceLinksSection: {
+    sectionTitle: string | null;
+    description: string | null;
+    linkPrompt: string | null;
+    items: Array<{
+      label: string | null;
+      description: string | null;
+      href: string | null;
+    }> | null;
   } | null;
 } | null;
 
@@ -642,7 +663,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_id == "siteSettings"][0]{\n  logo,\n  mainMenuRu[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  mainMenuUa[]{\n    label,\n    "link": link->{ _type, "slug": slug.current }\n  },\n  footerText,\n  "contact": coalesce(contact, footerContact),\n  seo{\n    title,\n    description,\n    ogImage,\n    ogImageAlt,\n    canonicalBaseUrl\n  }\n}': SiteSettingsQueryResult;
-    '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection{\n    sectionTitle,\n    time,\n    languages\n  }\n}': HomePageQueryResult;
+    '*[_type == "homePage" && language == $locale][0]{\n  title,\n  introText,\n  language,\n  meetingSection{\n    sectionTitle,\n    time,\n    languages\n  },\n  resourceLinksSection{\n    sectionTitle,\n    description,\n    linkPrompt,\n    items[]{\n      label,\n      description,\n      href\n    }\n  }\n}': HomePageQueryResult;
     '*[_type == "page" && language == $locale && slug.current == $slug][0]{\n  title,\n  body,\n  slug\n}': PageBySlugQueryResult;
     '*[_type == "faq" && language == $locale && slug.current == $slug][0]{\n  title,\n  intro,\n  items[]{\n    question,\n    answer\n  },\n  slug\n}': FaqBySlugQueryResult;
     '*[_type == "selfTest" && language == $locale && slug.current == $slug][0]{\n  title,\n  intro,\n  questions[]{\n    text\n  },\n  resultCopy,\n  slug\n}': SelfTestBySlugQueryResult;
