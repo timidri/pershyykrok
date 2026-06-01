@@ -5,8 +5,9 @@
 `.github/workflows/deploy-sanity-schema.yml` deploys the Studio schema after schema files change on `main`.
 It is separate from the Vercel web/studio deployments. A failure here does not necessarily mean the public website is down.
 
-The workflow first regenerates `apps/studio/schema.json`. If schema source files changed but the generated schema is
-unchanged, the deploy step is skipped because there is no schema shape update to publish.
+The workflow first regenerates `apps/studio/schema.json` and compares it with the previous `main` revision. If schema
+source files changed but the generated schema is unchanged, the deploy step is skipped because there is no schema shape
+update to publish.
 
 ## Required Token
 
