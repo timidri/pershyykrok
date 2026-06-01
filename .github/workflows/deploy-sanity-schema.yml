@@ -32,16 +32,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check Sanity schema deploy token
-        run: |
-          if [ -z "${SANITY_AUTH_TOKEN:-}" ]; then
-            echo "::error title=Missing SANITY_AUTH_TOKEN::Add a repository secret named SANITY_AUTH_TOKEN with Sanity schema deploy access for project n1ug74wc."
-            exit 1
-          fi
-          echo "SANITY_AUTH_TOKEN is set. It must include the Sanity grant sanity.project/deployStudio for project n1ug74wc."
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-
       - name: Deploy Sanity schema
         run: pnpm --filter studio exec sanity schema deploy
         env:
