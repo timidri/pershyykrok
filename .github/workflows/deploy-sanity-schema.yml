@@ -32,7 +32,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check generated schema diff
+        id: schema-diff
+        run: |
+          pnpm --filter studio extract
+          if git diff --quiet -- apps/studio/schema.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Generated schema is unchanged; schema deployment will be skipped."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Generated schema changed; schema deployment is required."
+          fi
+
       - name: Check Sanity schema deploy token
+        if: github.event_name == 'workflow_dispatch' || steps.schema-diff.outputs.changed == 'true'
         run: |
           if [ -z "${SANITY_AUTH_TOKEN:-}" ]; then
             echo "::error title=Missing SANITY_AUTH_TOKEN::Add a repository secret named SANITY_AUTH_TOKEN with Sanity schema deploy access for project n1ug74wc."
@@ -42,7 +55,12 @@ jobs:
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
 
+      - name: Skip unchanged schema deploy
+        if: github.event_name != 'workflow_dispatch' && steps.schema-diff.outputs.changed != 'true'
+        run: echo "Schema source changed without changing generated schema; skipping deploy."
+
       - name: Deploy Sanity schema
+        if: github.event_name == 'workflow_dispatch' || steps.schema-diff.outputs.changed == 'true'
         run: pnpm --filter studio exec sanity schema deploy
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
