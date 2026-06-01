@@ -59,7 +59,7 @@ This repo includes a Studio action that opens a draft preview using a server-ren
 
 ### Studio env vars (apps/studio)
 
-- `SANITY_STUDIO_PREVIEW_URL`: Base URL of the website (e.g. `https://www.pershyykrok.nl`).
+- `SANITY_STUDIO_PREVIEW_URL`: Base URL of the website (e.g. `https://pershyykrok.nl`).
 - `SANITY_STUDIO_PREVIEW_SECRET`: Must match `SANITY_PREVIEW_SECRET`.
 - `SANITY_STUDIO_VERCEL_DEPLOY_HOOK`: Vercel Deploy Hook URL for manual deploys from Studio.
 
@@ -72,15 +72,12 @@ This repo includes a GitHub Action that deploys the Sanity schema **only when sc
 - Workflow: `.github/workflows/deploy-sanity-schema.yml`
 - Trigger: `apps/studio/schemaTypes/**` and `apps/studio/sanity.config.ts`
 - Manual run: available via **Actions → Deploy Sanity Schema → Run workflow** (this is what `workflow_dispatch` enables).
-- More detail: `docs/sanity-schema-deploy.md`
 
 ### Required GitHub secret
 
 Add a repository secret named `SANITY_AUTH_TOKEN` with a **Developer** token (Editor is not sufficient for schema deploy).
 
 Create it in Sanity: Project → **API** → **Tokens** → **New token** → **Role: Developer**.
-
-The token must include the Sanity grant `sanity.project/deployStudio` for project `n1ug74wc`.
 
 ## Deploy on Vercel (website + studio)
 
@@ -116,3 +113,4 @@ Optional: if your Sanity project needs env vars (e.g. for CORS or a plugin), add
 
 - **Website**: Use the Vercel URL (e.g. `pershyykrok-web.vercel.app`).
 - **Studio**: Use the Studio project URL (e.g. `pershyykrok-studio.vercel.app`). In [sanity.io/manage](https://sanity.io/manage), add this URL to your project’s **API → CORS origins** (and **Hosts** if you use it) so the Studio can talk to Sanity.
+

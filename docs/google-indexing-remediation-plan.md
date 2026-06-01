@@ -44,22 +44,11 @@ Make Google consistently select `https://www.pershyykrok.nl` as canonical host a
 ## Rollout checklist
 
 - [x] Platform redirect configured as permanent from bare -> www (`apps/web/vercel.json`).
-- [x] Bare-domain root reaches `https://www.pershyykrok.nl/ua` through permanent redirects.
+- [x] Bare-domain root redirects directly to `https://www.pershyykrok.nl/ua` to avoid an extra `/` -> `/ua` hop.
 - [x] `siteSettings.seo.canonicalBaseUrl` defaults to `https://www.pershyykrok.nl` in Studio schema.
-- [x] Sitemap/robots inspected in production and aligned to `www` (verified 2026-05-22).
+- [ ] Sitemap/robots inspected in production and aligned to `www`.
 - [x] Internal hardcoded bare-domain links replaced (repo audit found no bare-domain app links).
 - [ ] Search Console re-submission and monitoring started.
-
-## Production verification notes
-
-Checked 2026-05-22:
-
-- `https://pershyykrok.nl/ua` and `/ru` return permanent `308` redirects to the `www` host.
-- `https://www.pershyykrok.nl/ua/` and `/ru/` return `200` and emit canonical, `hreflang`, and `og:url` values on `www`.
-- `https://www.pershyykrok.nl/robots.txt` advertises `https://www.pershyykrok.nl/sitemap.xml`.
-- `https://www.pershyykrok.nl/sitemap.xml` contains only `www` URLs.
-
-One minor note: `https://pershyykrok.nl/` currently reaches `/ua` through two permanent redirects (`bare root -> www root -> /ua`). This is not a blocker for canonicalization because both hops are permanent and end on the canonical host, but the Vercel domain redirect can be adjusted later if a single-hop root redirect is desired.
 
 ## Expected outcome
 
