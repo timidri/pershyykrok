@@ -36,12 +36,30 @@ jobs:
         id: schema-diff
         run: |
           pnpm --filter studio extract
-          if git diff --quiet -- apps/studio/schema.json; then
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run requested; schema deployment is required."
+            exit 0
+          fi
+
+          base_sha="${{ github.event.before }}"
+          if [ -z "$base_sha" ] || [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Previous main revision is unavailable; schema deployment is required."
+            exit 0
+          fi
+
+          if ! git cat-file -e "$base_sha^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$base_sha"
+          fi
+
+          if git diff --quiet "$base_sha" -- apps/studio/schema.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Generated schema is unchanged; schema deployment will be skipped."
+            echo "Generated schema is unchanged from the previous main revision; schema deployment will be skipped."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "Generated schema changed; schema deployment is required."
+            echo "Generated schema changed from the previous main revision; schema deployment is required."
           fi
 
       - name: Check Sanity schema deploy token
