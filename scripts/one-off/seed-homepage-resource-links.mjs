@@ -41,66 +41,56 @@ const client = createClient({
 
 const resourceLinksByLanguage = {
   ua: {
-    sectionTitle: 'Ресурси АА',
+    sectionTitle: 'Матеріали для читання на зустрічі',
     description:
-      'Перевірені сторінки, де можна знайти нашу групу, інші україномовні зустрічі та загальну інформацію про АА.',
-    linkPrompt: 'Перейти',
+      'Посилання на тексти, які ми зазвичай читаємо під час зустрічі: розділ з Великої Книги, Перший Крок з «12 і 12» та щоденні роздуми.',
+    linkPrompt: 'Відкрити',
     items: [
       {
-        _key: 'aa-netherlands',
-        label: 'Pershyy Krok в AA Netherlands',
-        description: 'Актуальна сторінка нашої групи в офіційному списку зустрічей AA Netherlands.',
-        href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
+        _key: 'big-book-how-it-works',
+        label: '«Як воно діє» з Великої Книги',
+        description: 'Розділ 5 книги «Анонімні Алкоголіки» у PDF на сайті АА України.',
+        href: 'https://aa.org.ua/wp-content/uploads/2024/07/Anonimni-Alkogoliki-internet_25.03.22.pdf#page=72',
       },
       {
-        _key: 'aa-ukraine-abroad',
-        label: 'Україномовні групи за кордоном',
-        description: 'Список АА України з україномовними групами та контактами поза Україною.',
-        href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
+        _key: 'twelve-and-twelve-step-one',
+        label: 'Перший Крок з «12 і 12»',
+        description:
+          'Офіційна сторінка книжки «Дванадцять Кроків і Дванадцять Традицій» українською.',
+        href: 'https://aa.org.ua/literature/dvanadtsiat-krokiv-ta-dvanadtsiat-tradytsiy/',
       },
       {
-        _key: 'aa-continental-europe',
-        label: 'A.A. Continental European Region',
-        description: 'Ресурси АА для англомовних груп у континентальній Європі.',
-        href: 'https://alcoholics-anonymous.eu/',
-      },
-      {
-        _key: 'aa-world-services',
-        label: 'Alcoholics Anonymous',
-        description: 'Головний сайт Alcoholics Anonymous World Services з інформацією про програму АА.',
-        href: 'https://www.aa.org/',
+        _key: 'daily-reflections',
+        label: 'Щоденні роздуми',
+        description: 'Українське видання щоденних роздумів на сайті АА України.',
+        href: 'https://aa.org.ua/wp-content/uploads/2026/05/SHCHodenni-rozdumy-dlia-WEB.pdf',
       },
     ],
   },
   ru: {
-    sectionTitle: 'Ресурсы АА',
+    sectionTitle: 'Материалы для чтения на встрече',
     description:
-      'Проверенные страницы, где можно найти нашу группу, другие украиноязычные встречи и общую информацию об АА.',
-    linkPrompt: 'Перейти',
+      'Ссылки на тексты, которые мы обычно читаем во время встречи: раздел из Большой Книги, Первый Шаг из «12 и 12» и ежедневные размышления.',
+    linkPrompt: 'Открыть',
     items: [
       {
-        _key: 'aa-netherlands',
-        label: 'Pershyy Krok в AA Netherlands',
-        description: 'Актуальная страница нашей группы в официальном списке встреч AA Netherlands.',
-        href: 'https://aa-netherlands.org/aa-meetings/find-a-meeting/pershyy-krok/',
+        _key: 'big-book-how-it-works',
+        label: '«Программа в действии» из Большой Книги',
+        description: 'Глава 5 книги «Анонимные Алкоголики» в PDF на сайте АА Украины.',
+        href: 'https://aa.org.ua/wp-content/uploads/2024/09/Anonimnye-alkogoliki.-S-istoriyami.pdf#page=92',
       },
       {
-        _key: 'aa-ukraine-abroad',
-        label: 'Украиноязычные группы за рубежом',
-        description: 'Список АА Украины с украиноязычными группами и контактами за пределами Украины.',
-        href: 'https://aa.org.ua/ukrainomovni-hrupy-za-kordonom/',
+        _key: 'twelve-and-twelve-step-one',
+        label: 'Первый Шаг из «12 и 12»',
+        description:
+          'Официальная страница книги «Двенадцать Шагов и Двенадцать Традиций» на русском.',
+        href: 'https://aa.org.ua/literature/dvenadtsat-shahov-y-dvenadtsat-tradytsyy/',
       },
       {
-        _key: 'aa-continental-europe',
-        label: 'A.A. Continental European Region',
-        description: 'Ресурсы АА для англоязычных групп в континентальной Европе.',
-        href: 'https://alcoholics-anonymous.eu/',
-      },
-      {
-        _key: 'aa-world-services',
-        label: 'Alcoholics Anonymous',
-        description: 'Главный сайт Alcoholics Anonymous World Services с информацией о программе АА.',
-        href: 'https://www.aa.org/',
+        _key: 'daily-reflections',
+        label: 'Ежедневные размышления',
+        description: 'Русская страница ежедневных размышлений на сайте АА Украины.',
+        href: 'https://aa.org.ua/literature/shchodenni-rozdumy/',
       },
     ],
   },
