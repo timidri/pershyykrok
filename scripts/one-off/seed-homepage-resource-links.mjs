@@ -25,9 +25,11 @@ if (fs.existsSync(envPath)) {
   }
 }
 
-const token = env.SANITY_API_WRITE_TOKEN
+const token = env.SANITY_API_WRITE_TOKEN || env.SANITY_AUTH_TOKEN
 if (!token) {
-  console.error('SANITY_API_WRITE_TOKEN not found in the environment or repo-root .env.local')
+  console.error(
+    'SANITY_API_WRITE_TOKEN or SANITY_AUTH_TOKEN not found in the environment or repo-root .env.local',
+  )
   process.exit(1)
 }
 
