@@ -15,6 +15,12 @@ Multilingual (Ukrainian/Russian) content site with a Sanity Studio backend and a
 - **Frontend**: [Astro](https://astro.build) v5 — hybrid output (static pages + server preview), [Tailwind CSS](https://tailwindcss.com), [astro-portabletext](https://github.com/theisel/astro-portabletext) for rich text (no React).
 - **Types**: Sanity typegen writes query result types to `apps/web/src/sanity-types.ts`; a watch script can regenerate on schema/query changes.
 
+## Repository history safety
+
+`main`'s current tip is clean. Before checking out or fetching older history, read
+[Repository History Safety in AGENTS.md](AGENTS.md#repository-history-safety) — a historical commit on
+`main` is permanently reachable and must never be checked out or built.
+
 ## Installation
 
 1. **Prerequisites**: [Node.js](https://nodejs.org) (LTS) and [pnpm](https://pnpm.io/installation).
